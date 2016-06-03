@@ -20,7 +20,7 @@ DATE MODIFIED:
 		--->
         
     <!--- Constructor Function to initialize component --->
-	<cffunction name="init" access="public" returntype="void" hint="Constructor creates Book object, sets datasouce." output="yes">
+	<cffunction name="init" access="public" returntype="void" hint="Constructor creates Book object, sets datasource." output="yes">
       	<!--- set datasource and store in cf property--->
 		variables.attributes.datasource = "";
     	<cfargument name="datasource" type="string" required="yes" />
@@ -33,7 +33,7 @@ DATE MODIFIED:
    		<cfargument name="Title" type="string" required="yes" hint="Title of text">
    		<cfargument name="Quantity" type="string" required="yes" hint="Number of copies">
 
-   		<cfstoredproc procedure="usp_BookCreate" >
+   		<cfstoredproc datasource="#variables.datasource#" procedure="usp_BookCreate" >
         	<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@ISBN" value="#ISBN#">
     		<cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@Title" value="#Title#">
     		<cfprocparam cfsqltype="cf_sql_int" dbvarname="@Quantity" value="#Quantity#">
