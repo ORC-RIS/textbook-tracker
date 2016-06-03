@@ -11,8 +11,8 @@ DATE MODIFIED:
 <!DOCTYPE html>
 <html>
 	<cfoutput>
-		<link href="bookstoreCSS.css" rel="stylesheet" type="text/css">
-		<link href="../styles/bootstrap.3.3.6.modified.css" rel="stylesheet" type="text/css">
+		<link href="styles/bookstoreCSS.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="../styles/bootstrap.3.3.6.modified.css">
 	</cfoutput>
 
 <head>
@@ -23,6 +23,9 @@ DATE MODIFIED:
 
 	<div>
 		<h1>TEXTBOOK TRACKER</h1>
+
+		<!--- test, be sure to remove --->
+		<cfoutput>logged in as user: <h4>#getAuthUser()#</h4></cfoutput>
 	</div>
 
 	<div>
