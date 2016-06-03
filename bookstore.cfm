@@ -28,28 +28,24 @@ DATE MODIFIED:
 	<div>
 		<div>
 			<h3>CURRENT INVENTORY:</h3>
-
-			<!--- List all books in inventory--->
-			
-			<!--- the old way
-			<cfinvoke component="components.qry_book" method="getAllBooks" returnvariable="rsAllBooks" >
-			</cfinvoke>
-			--->
-
-			<!--- <cfif structKeyExists(FORM, 'bookstore_request')> --->
-			
-			<!--- <cfdump var="#Application#" /> --->			
+			<!--- retrieve datasource from Application.cfc --->
 			<cfset datasource = Application.datasource />
+            
+            <!--- Create a book Object--->
             <cfset Book = CreateObject("components/qry_book") />
+            
+            <!--- Call the book's constructor and pass in the datasource--->
             <cfset Book.init(datasource) />
+            
+            <!--- Object to hold return data--->
             <cfset allBooks = Book.getAllBooks() />
+
+            <!--- List all books in inventory--->
             <ul>
 			<cfoutput query="allBooks" >
 				<li>#allBooks.title# #allBooks.ISBN#</li>
 			</cfoutput>
 			</ul>
-
-			<!--- </cfif> --->
 
 		</div>
 	</div>

@@ -5,7 +5,7 @@ DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
 
-DATE MODIFIED:
+DATE MODIFIED: 
 --->
 <cfcomponent displayname="Application" output="true" hint="Handle the application.">
 
@@ -32,9 +32,8 @@ DATE MODIFIED:
                 output="false"
                 hint="Fires when the session is first created.">
                 
-                <!--- return out --->
                 <cfreturn />
-     </cffunction>
+    </cffunction>
                     
     <cffunction name="onRequestStart"
     			access="public"
@@ -43,19 +42,18 @@ DATE MODIFIED:
                 hint="Fires at the first part of page processing.">
         
 		<!--- define arguments --->
-    	<cfargument name="targetpage" 
+   		<cfargument name="targetpage" 
         			required="true" 
                     type="string" />
 
-		
 		<!--- datasource variable --->
-        <cfset Application.datasource = this.datasource>
-			<cfif isDefined("url.init") >
-    			<cfset onApplicationStart()>
-   			</cfif>
+    	<cfset Application.datasource = this.datasource>
+                
+		<cfif isDefined("url.init") >
+    		<cfset onApplicationStart()>
+   		</cfif>
             
-        <!--- Return out. --->    
-            <cfreturn true />
+        <cfreturn true />
             
     </cffunction>
     
