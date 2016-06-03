@@ -22,12 +22,9 @@ DATE MODIFIED:
                 returntype="boolean"
                 output="false"
                 hint="Fires when the application is first created.">
-             
-    	<!---<cfset application.baseHref = "/">  insert root directory of app --->
-        <!---<cfset application.cssHref = "/">	 insert css directory of app --->
-        <cfreturn true />
-        
-     </cffunction>
+        		
+                <cfreturn true />
+    </cffunction>
 
 	<cffunction name="onSessionStart"
     			access="public"
@@ -35,9 +32,8 @@ DATE MODIFIED:
                 output="false"
                 hint="Fires when the session is first created.">
                 
-                <!--- return out --->
                 <cfreturn />
-     </cffunction>
+    </cffunction>
                     
     <cffunction name="onRequestStart"
     			access="public"
@@ -46,19 +42,18 @@ DATE MODIFIED:
                 hint="Fires at the first part of page processing.">
         
 		<!--- define arguments --->
-    	<cfargument name="targetpage" 
+   		<cfargument name="targetpage" 
         			required="true" 
-                    type="string" />
+                	type="string" />
 		
 		<!--- datasource variable --->
-        <cfset Application.datasource = this.datasource>
+    	<cfset Application.datasource = this.datasource>
                 
-			<cfif isDefined("url.init") >
-    			<cfset onApplicationStart()>
-   			</cfif>
+		<cfif isDefined("url.init") >
+    		<cfset onApplicationStart()>
+   		</cfif>
             
-        <!--- Return out. --->    
-            <cfreturn true />
+        <cfreturn true />
             
     </cffunction>
     
