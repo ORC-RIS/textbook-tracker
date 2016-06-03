@@ -9,7 +9,7 @@ DATE MODIFIED:
 --->
 <cfcomponent displayname="Application" output="true" hint="Handle the application.">
 
-	<!---Application Variables --->
+<!---Application Metadata. These are not Application-scoped variables! --->
 	<cfset this.name="Bookstore">
 	<cfset this.datasource="dsTestDatabaseSqlDev1">
     <cfset this.applicationTimeout = CreateTimeSpan( 0, 0, 1, 0 ) />
@@ -22,9 +22,6 @@ DATE MODIFIED:
                 returntype="boolean"
                 output="false"
                 hint="Fires when the application is first created.">
-                
-    	<cfset application.baseHref = "/"> <!--- insert root directory of app --->
-        <cfset application.cssHref = "/">	<!--- insert css directory of app --->
         <cfreturn true />
         
      </cffunction>
@@ -49,7 +46,10 @@ DATE MODIFIED:
     	<cfargument name="targetpage" 
         			required="true" 
                     type="string" />
-			
+
+		
+		<!--- datasource variable --->
+        <cfset Application.datasource = this.datasource>
 			<cfif isDefined("url.init") >
     			<cfset onApplicationStart()>
    			</cfif>
