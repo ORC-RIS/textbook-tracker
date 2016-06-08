@@ -1,6 +1,7 @@
 <!---
 DESCRIPTION: Textbook Tracker page
-CREATED BY: David Elliott
+CREATED BY: David Elliott,
+			John Lynch
 DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
@@ -43,16 +44,35 @@ DATE MODIFIED:
             <!--- Object to hold return data--->
             <cfset allBooks = Book.getAllBooks() />
 
-            <!--- List all books in inventory--->
-            <ul>
-			<cfoutput query="allBooks" >
-				<li>#allBooks.title# #allBooks.ISBN#</li>
-			</cfoutput>
-			</ul>
+			<table width="1000" align="center" cellspacing="0" border="1">
+					<th>ISBN</th>
+					<th>Title</th>
+					<th>Availability</th>
+				</tr>
+				<cfoutput query="allBooks" startrow="1">
+					<tr>
+						<td>#ISBN#</td>
+						<td>#Title#</td>
+						<td align="center">
+							<cfif Quantity GTE 1>
+								<form id="book-actions" action="checkout.cfm" method="GET">
+									<button name="CheckoutBook" type="submit" form="book-actions" value="#BookID#">Checkout</button>
+								</form>
+								<cfelse>
+									<button form="book-actions">Email Waitlist</button>
+							</cfif>
 
+						</td>
+					</tr>	
+				</cfoutput>
+			</table>
 		</div>
 	</div>
-	
+<!--- 	<cfform>
+		<cfinput name="firstname" type="text" placeholder="First Name">
+			
+		</cfinput>
+	</cfform> --->
 	<hr>
     <form action="../index.cfm" align="center" method="POST">
     	<input type="submit" class="btn btn-default" value="Back" name="return_from_books">
