@@ -24,5 +24,14 @@ div div{
 	border-width: 6px;
 	
 }
+table {
+	
+	border-collapse: collapse;
+}
+table tr:nth-child(even) {
+	background-color: #f2f2f2;
+}
+tr{
+	background-color:d0d0d0;
 	
 

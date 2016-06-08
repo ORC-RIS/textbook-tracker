@@ -30,7 +30,15 @@ DATE MODIFIED:
 			<h3>Loan Confirmation:</h3>
             <!--- retrieve datasource from Application.cfc --->
 			<cfset datasource = Application.datasource />
+            <cfset Book = CreateObject("components/qry_book") />
+            <cfset Book.init(datasource) />
+
 			
+			<cfset bookID = #url.CheckoutBook# />
+			<cfset book = Book.getBook(bookID) />
+
+    		<cfdump var="#book#" >
+          
 			<!--- retrieve book component from bookstore --->
 			
 			<!--- retrieve user component from bookstore --->

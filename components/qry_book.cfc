@@ -50,5 +50,15 @@ DATE MODIFIED:
         </cfstoredproc>
         <cfreturn rsBookList>
     </cffunction>
+    
+    <cffunction name="getBook" access="public" returntype="any" hint="Returns book" >
+       	<cfargument name="BookID" type="numeric" required="yes" hint="book ID">
+
+    	<cfstoredproc datasource="#variables.datasource#" procedure="usp_getBook">
+        	<cfprocparam cfsqltype="cf_sql_int" dbvarname="@BookID" value="#BookID#">
+        	<cfprocresult name="book">
+        </cfstoredproc>
+        <cfreturn book>
+    </cffunction>
         
 </cfcomponent>

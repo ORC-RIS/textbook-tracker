@@ -54,7 +54,7 @@ DATE MODIFIED:
 
         <!--- change URLs based on #target# --->
         <!--- maybe I should make an array called 'allowed pages' or something --->
-        <cfif "#target#" IS "/registration.cfm">
+        <!---<cfif "#target#" IS "/registration.cfm">
           <cfinclude template="registration.cfm">
           <cfabort>
         </cfif>
@@ -279,7 +279,7 @@ DATE MODIFIED:
                     
 		<cfif isDefined("url.init") >
     		<cfset onApplicationStart()>
-   		</cfif>
+   		</cfif>--->
             
     </cffunction>
 </cfcomponent>
