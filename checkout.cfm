@@ -1,6 +1,6 @@
 <!---
 DESCRIPTION: Textbook Tracker page
-CREATED BY: David Elliott
+CREATED BY: David Elliott, Raphael Saint Louis
 DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
