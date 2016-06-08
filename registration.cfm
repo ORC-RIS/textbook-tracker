@@ -6,6 +6,17 @@
     <!--- if the user is coming back to this page after sending the form with the submit button named 'register',
     then the form is filled out and we need to process it --->
     
+    <!--- create and initialize user object --->
+    <cfset User = CreateObject("components/user") />
+    <cfset User.init(Application.datasource, "admin", "") />
+
+    <!--- retrieve some fields --->
+    <cfset username = User.getFirstName() />
+
+    <cfoutput>
+      #username#
+    </cfoutput>
+
     <!--- otherwise the form is empty, so we can skip all this processing and display the form;
     afterwards, we send them back to this page, then this if statement will run positively  --->
     <cfif structKeyExists(FORM, 'register')>

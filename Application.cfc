@@ -47,6 +47,10 @@ DATE MODIFIED:
         <cfset Application.datasource = this.datasource>
 		<cfset GLOBAL_DATASOURCE = this.datasource>
 
+        <!--- create components that will be used for verifying login --->
+        <cfset User_Verif = CreateObject("components/user") />
+        <cfset User_Recov = CreateObject("components/user") />
+
         <!--- change URLs based on #target# --->
         <!--- maybe I should make an array called 'allowed pages' or something --->
         <cfif "#target#" IS "/registration.cfm">
@@ -112,20 +116,25 @@ DATE MODIFIED:
                 <cfset new_pass = RandRange(10000, 99999)>
                 <cfset new_pass_hash = Hash(new_pass, "SHA-512")>
 
-                <cfquery name="resetEmailQuery" datasource="#GLOBAL_DATASOURCE#">
+<!---                 <cfquery name="resetEmailQuery" datasource="#GLOBAL_DATASOURCE#">
                         SELECT email, password
                         FROM Users2
                         WHERE email = 
                             <cfqueryparam cfsqltype="cf_sql_varchar" value='#URL.email#'>
-                </cfquery>
+                </cfquery> --->
+
+                <cfset User_Recov.init(Application.datasource, "", "#URL.email#") />
+                <cfset resetEmailQuery = User_Recov.recoverPassword("#URL.email#") >
 
                 <cfif "#Hash(resetEmailQuery.password)#" IS URL.code>
-                    <cfquery name="resetEmailQueryPasswordUpdate" datasource="#GLOBAL_DATASOURCE#">
+                    <!--- <cfquery name="resetEmailQueryPasswordUpdate" datasource="#GLOBAL_DATASOURCE#">
                             UPDATE  Users2
                             SET     password = '#new_pass_hash#'
                             WHERE   email = 
                                 <cfqueryparam cfsqltype="cf_sql_varchar" value='#URL.email#'>
-                    </cfquery>
+                    </cfquery> --->
+                    <cfset User_Recov.updatePassword(#URL.email#, #new_pass_hash#) />
+                    <!--- <cfinvoke method="updatePassword" component="User_Recov" returntype="void"> --->
                 <cfelse>
                         <div class="alert alert-danger">
                             This page has expired.
@@ -165,14 +174,11 @@ DATE MODIFIED:
                 <cfelse>
                     <cfset pass_hash = HASH('#cflogin.password#', 'SHA-512')>
                     
-                    <cfquery name="loginQuery" datasource="#GLOBAL_DATASOURCE#">
-                        SELECT username, password
-                        FROM Users2
-                        WHERE username = 
-                            <cfqueryparam cfsqltype="cf_sql_varchar" value='#cflogin.name#'>
-                        AND password =
-                            <cfqueryparam cfsqltype="cf_sql_varchar" value='#pass_hash#'>
-                    </cfquery>
+                    <!--- use the component to verify the user's username-password combination --->
+                    <cfset User_Verif.init(Application.datasource, "#cflogin.name#", "") />
+
+                    <!--- create the query object --->
+                    <cfset loginQuery = User_Verif.verifyUsernamePasswordCombo("#cflogin.name#", "#pass_hash#") >
 
                     <cfif loginQuery.username NEQ "">
                         <cfloginuser 
