@@ -1,6 +1,7 @@
 <!---
 DESCRIPTION: Application component
-CREATED BY: David Elliott
+CREATED BY: David Elliott,
+            John Lynch,
 DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
