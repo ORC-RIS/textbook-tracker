@@ -5,19 +5,18 @@
     <div class="jumbotron">
       <!--- if the user has passed in their email and they want to recover their password --->
       <cfif structKeyExists(FORM, 'email_provided_pass')>
-        <cfquery name="forgotNameQuery" datasource="#GLOBAL_DATASOURCE#">
-              SELECT username, email, password
-              FROM Users2
-              WHERE email =
-                <cfqueryparam cfsqltype="cf_sql_varchar" value='#FORM.email#'>
-        </cfquery>
+        <cfset User_Recov = CreateObject("components/user") />
+        <cfset User_Recov.init(Application.datasource, "", "#FORM.email#") />
+
+        <!--- create the query object --->
+        <cfset forgotPassQuery = User_Recov.recoverPassword("#FORM.email#") >
 
         <cfoutput>
           <!--- TODO: don't send an email if the email doesn't exist in our DB --->
           <cfmail 
             from="noreply@webdev1.research.ucf.edu" 
             to="#FORM.email#" 
-            subject="Important Information">Our records state that you've forgotten your password and would like to reset it. If this is the case, then please follow the following link, if this email was sent in error, then you may simply ignore this message. http://vinay.move.webdev1.research.ucf.edu/index.cfm?email=<cfoutput>#FORM.email#</cfoutput>&code=<cfoutput>#Hash(forgotNameQuery.password)#</cfoutput>
+            subject="Important Information">Our records state that you've forgotten your password and would like to reset it. If this is the case, then please follow the following link, if this email was sent in error, then you may simply ignore this message. http://vinay.move.webdev1.research.ucf.edu/index.cfm?email=<cfoutput>#FORM.email#</cfoutput>&code=<cfoutput>#Hash(forgotPassQuery.password)#</cfoutput>
           </cfmail> 
 
           <cflocation url="action_page.cfm?sender=fp" addtoken="false">

@@ -5,12 +5,11 @@
     <div class="jumbotron">
       <!--- if the user has passed in their email and they want to recover their username --->
       <cfif structKeyExists(FORM, 'email_provided_name')>
-        <cfquery name="forgotNameQuery" datasource="#GLOBAL_DATASOURCE#">
-              SELECT username, email
-              FROM Users2
-              WHERE email =
-                <cfqueryparam cfsqltype="cf_sql_varchar" value='#FORM.email#'>
-        </cfquery>
+        <cfset User_Recov = CreateObject("components/user") />
+        <cfset User_Recov.init(Application.datasource, "", "#FORM.email#") />
+
+        <!--- create the query object --->
+        <cfset forgotNameQuery = User_Recov.recoverUsername("#FORM.email#") >
 
         <cfoutput>
           <!--- TODO: don't send an email if the email doesn't exist in our DB --->
