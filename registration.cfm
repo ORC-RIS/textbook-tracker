@@ -6,17 +6,6 @@
     <!--- if the user is coming back to this page after sending the form with the submit button named 'register',
     then the form is filled out and we need to process it --->
     
-    <!--- create and initialize user object --->
-    <cfset User = CreateObject("components/user") />
-    <cfset User.init(Application.datasource, "admin", "") />
-
-    <!--- retrieve some fields --->
-    <cfset username = User.getFirstName() />
-
-    <cfoutput>
-      #username#
-    </cfoutput>
-
     <!--- otherwise the form is empty, so we can skip all this processing and display the form;
     afterwards, we send them back to this page, then this if statement will run positively  --->
     <cfif structKeyExists(FORM, 'register')>
@@ -36,15 +25,16 @@
        
         <!--- grabs the set of all entries in the database where the username is the same as the one inputted in our form; 
         since username is a key in the DB, there should only be one --->
-        <cfquery name="checkConstraintsQuery" datasource="#GLOBAL_DATASOURCE#">
-              SELECT  username
-              FROM    Users2
-              WHERE   username='#FORM.username#'
-        </cfquery>
+
+        <!--- create and initialize user object --->
+        <cfset User_Registration_Object = CreateObject("components/user") />
+        <cfset User_Registration_Object.init (Application.datasource, "#FORM.username#", "") />
+
+        <cfset retrieved_username = User_Registration_Object.getUsername()>
       
         <!--- if query.username is not empty, then the username already exists in our database, which is a problem, 
         since our key constraint doesn't allow us to have two tuples in the DB with the same username --->
-        <cfif checkConstraintsQuery.username NEQ "">
+        <cfif retrieved_username NEQ "">
           <cfoutput>
            <div class="alert alert-warning">
               This username has already been taken, please use a different one.
@@ -65,13 +55,11 @@
         <!--- if we're here, then that the user has filled out all the forms and that their desired username wasn't taken --->
 
         <!--- query for checking if the user's inputted email doesn't already exist in the system --->
-        <cfquery name="checkConstraintsQueryEmail" datasource="#GLOBAL_DATASOURCE#">
-              SELECT  email
-              FROM    Users2
-              WHERE   email='#FORM.email#'
-        </cfquery>
+        <cfset retrieved_email = User_Registration_Object.getEmail()>
 
-        <cfif checkConstraintsQueryEmail.email NEQ "">
+        <cfdump var="#retrieved_email#">
+
+        <cfif retrieved_email NEQ "">
           <cfoutput>
            <div class="alert alert-danger">
               This email address is already tied to an account in the system.
@@ -89,11 +77,8 @@
           <cfabort>
         </cfif>
 
-        <cfquery name="regQuery" datasource="#GLOBAL_DATASOURCE#">
-              INSERT INTO Users2
-              VALUES ('#FORM.username#', '#hashed_password#', '#FORM.f_name#', '#FORM.l_name#', '#FORM.email#')
-        </cfquery>
-        
+        <cfset registration_query = User_Registration_Object.addUserToDatabase('#FORM.username#', '#hashed_password#', '#FORM.f_name#', '#FORM.l_name#', '#FORM.email#', 'user') />
+
         <cflocation url="action_page.cfm?sender=reg" addtoken="false">
         
         </cfif>
