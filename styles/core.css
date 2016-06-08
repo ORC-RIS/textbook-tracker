@@ -1,0 +1,136 @@
+div.banner 
+{
+  font-family: "Arial";
+  font-size: 35pt;
+  margin-top: 30px;
+  text-align: center;
+}
+
+div.mainContent
+{
+  margin-left: 60px;
+  margin-right: 60px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-top: 60px;
+  background-color: white;
+  padding-bottom: 40px;
+  padding-top: 40px;
+  font-family: sans-serif;
+  font-size: 18pt;
+  text-align: center;
+  display: block;
+}
+
+div.secContent
+{
+  margin-left: 60px;
+  margin-right: 60px;
+  padding-left: 30px;
+  padding-right: 30px;
+  margin-top: 0px;
+  background-color: white;
+  padding-bottom: 40px;
+  padding-top: 40px;
+  font-family: sans-serif;
+  font-size: 12pt;
+  text-align: center;
+  display: block;
+}
+
+div.thirContent
+{
+  color: yellow;
+  padding-bottom: 0px;
+  padding-top: 1px;
+  font-family: sans-serif;
+  font-size: 8pt;
+  text-align: center;
+}
+
+div.formLeft
+{
+  float: left;
+}
+
+div.formRight
+{
+  float: right;
+}
+
+div.topRight
+{
+  color: yellow;
+  padding-bottom: 0px;
+  padding-top: 1px;
+  font-family: sans-serif;
+  font-size: 8pt;
+  text-align: right;
+}
+
+p.formContent
+{
+  display: block;
+  margin-bottom: 30px;
+  margin-right: 150px;
+  margin-left: 80px;
+  width: 1000px;
+  font-family: sans-serif;
+  font-size: 14px;
+}
+
+.boxes
+{
+  width: 300px;
+  height: 30px;
+}
+
+table
+{
+  border: 1px solid gray;
+  border-collapse: collapse;
+}
+
+div.header
+{
+  position: absolute;
+  color: #FFF8DC;
+  font-family: sans-serif;
+  font-size: 8pt;
+  top: 10px;
+  /*margin-left: 42%;*/
+  width: 30%;
+}
+
+div.footer
+{
+  position: absolute;
+  color: #FFF8DC;
+  margin-top: 100px;
+  font-family: sans-serif;
+  font-size: 8pt;
+  right: 5px;
+  bottom: 0px;
+}
+
+div.footer_contact_us
+{
+  position: absolute;
+  color: #FFF8DC;
+  margin-top: 100px;
+  font-family: sans-serif;
+  font-size: 8pt;
+  left: 5px;
+  bottom: 0px;
+}
+
+img
+{
+  max-height: 50%;
+  max-width: 50%;
+}
+
+html
+{
+  background-color: #7C8082;
+}
