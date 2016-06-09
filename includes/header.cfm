@@ -8,7 +8,7 @@
 <!--- I can just add all of these to an array called, "allowed pages" or something --->
 <cfif getAuthUser() EQ "">
 	<cfif #CGI.SCRIPT_NAME# NEQ "/login.cfm" AND #CGI.SCRIPT_NAME# NEQ "/index.cfm" AND #CGI.SCRIPT_NAME# NEQ "/registration.cfm" 
-	AND #CGI.SCRIPT_NAME# NEQ "/forgotten_name.cfm" AND #CGI.SCRIPT_NAME# NEQ "/forgotten_pass.cfm" AND #CGI.SCRIPT_NAME# NEQ "/action_page.cfm">
+	AND #CGI.SCRIPT_NAME# NEQ "/forgotten_name.cfm" AND #CGI.SCRIPT_NAME# NEQ "/forgotten_pass.cfm" AND #CGI.SCRIPT_NAME# NEQ "/action_page.cfm" AND #CGI.SCRIPT_NAME# NEQ "/checkout.cfm">
 		<cfif NOT isDefined("cflogin")>
 			<cflocation 
 				url="login.cfm"
@@ -33,15 +33,16 @@
 </cfquery>
 
 <!--- "logged in as" header message --->
+
+<!--- Replaced getAuthUser() with isDefined("LoggedUser") --->
 <cfif getAuthUser() NEQ "">
     <div class="container">
       <div class="row-fluid">
         <div class="span6 pull-right" style="text-align:right">
-        	<cfif getAuthUser() EQ "admin">
-        		Logged in as <cfoutput>#loginQuery2.username#</cfoutput>
-        	<cfelse>
-        		Logged in as <cfoutput>#loginQuery2.first_name# #loginQuery2.last_name#</cfoutput>
-        	</cfif>
+        	<cfoutput>
+        		Logged in as #LoggedUser.getFirstName()# #LoggedUser.getLastName()#<br/>
+        		Role: #LoggedUser.getUserRole()#
+        	</cfoutput>
         </div>
       </div>
     </div>

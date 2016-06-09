@@ -31,6 +31,7 @@ DATE MODIFIED:
                 returntype="void"
                 output="false"
                 hint="Fires when the session is first created.">
+                <cfabort showerror="Test">
                 <cfreturn />
     </cffunction>
                     
@@ -47,6 +48,9 @@ DATE MODIFIED:
         <!--- datasource variable --->
         <cfset Application.datasource = this.datasource>
 		<cfset GLOBAL_DATASOURCE = this.datasource>
+        
+        <!--- Create component of the logged in user (Initially declared blank until they log in) --->
+        <cfset LoggedUser = CreateObject("components/user") />
 
         <!--- create components that will be used for verifying login --->
         <cfset User_Verif = CreateObject("components/user") />
@@ -55,7 +59,7 @@ DATE MODIFIED:
         <!--- change URLs based on #target# --->
         <!--- maybe I should make an array called 'allowed pages' or something --->
 
-        <!---<cfif "#target#" IS "/registration.cfm">
+        <cfif "#target#" IS "/registration.cfm">
           <cfinclude template="registration.cfm">
           <cfabort>
         </cfif>
@@ -102,6 +106,11 @@ DATE MODIFIED:
 
         <cfif "#target#" IS "confirmation_un.cfm">
           <cfinclude template="confirmation_un.cfm">
+          <cfabort>
+        </cfif>
+
+        <cfif "#target#" IS "/checkout.cfm">
+          <cfinclude template="checkout.cfm">
           <cfabort>
         </cfif>
 
@@ -238,13 +247,11 @@ DATE MODIFIED:
         <cfif getAuthUser() NEQ "">  
 
             <!--- create new user object/component --->
-            <cfset Send_User_to_Dashboard = CreateObject("components/user") />
-            <cfset Send_User_to_Dashboard.init (Application.datasource, "#getAuthUser()#", "") />
+            <!--- <cfset LoggedUser = CreateObject("components/user") /> --->
+            <cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
 
             <!--- NEEDS TO CHECK THEIR ROLES IN THE FUTURE --->
-            <cfset User_Object_Name = Send_User_to_Dashboard.getUsername()>
-
-            <cfif #User_Object_Name# IS 'admin'>
+            <cfif #LoggedUser.getUserRole()# IS 'admin'>
                 <!--- if admin is trying to 'view all users' --->
                 <cfif structKeyExists(FORM, 'view_users')>
                     <cfinclude template="users_view.cfm">
@@ -265,7 +272,7 @@ DATE MODIFIED:
 		<cfif isDefined("url.init") >
     		<cfset onApplicationStart()>
 
-   		</cfif>--->
+   		</cfif>
             
     </cffunction>
 </cfcomponent>
