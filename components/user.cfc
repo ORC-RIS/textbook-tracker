@@ -8,16 +8,7 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
 --->
 
 <cfcomponent displayname="user" output="true" hint="Queries for Book Table.">
-
-    <!--- define the properties that the functions will modify --->
-    <!--- ACTUALLY, THIS ISN'T NECESSARY --->
-<!---     <cfproperty name="userID_p" type="numeric">
-    <cfproperty name="username_p" type="string">
-    <cfproperty name="password_p" type="string">
-    <cfproperty name="first_name_p" type="string">
-    <cfproperty name="last_name_p" type="string">
-    <cfproperty name="email_p" type="string"> 
- --->
+    
     <!--- Constructor Function to initialize component --->
     <cffunction name="init" access="public" returntype="void" hint="Constructor creates User object, sets datasouce." output="yes">
         <!--- set datasource and store in cf property--->

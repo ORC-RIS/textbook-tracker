@@ -54,7 +54,7 @@ DATE MODIFIED:
 
         <!--- change URLs based on #target# --->
         <!--- maybe I should make an array called 'allowed pages' or something --->
-        <!---<cfif "#target#" IS "/registration.cfm">
+        <cfif "#target#" IS "/registration.cfm">
           <cfinclude template="registration.cfm">
           <cfabort>
         </cfif>
@@ -190,11 +190,12 @@ DATE MODIFIED:
         <!--- check to make sure that the user is logged in --->
         <!--- logic for pass_change_form.cfm --->
         <cfif getAuthUser() NEQ "">
+            <!--- if user tries to change password, take them to password change form --->
             <cfif structKeyExists(FORM, 'change_pass')>
                 <cflocation 
                     url="pass_change_form.cfm"
                     addtoken="false">
-            <!--- checks to see if the user has attemped to change their password --->
+            <!--- checks to see if the user has attemped to change their password (ie, user is coming from password change form) --->
             <cfelseif structKeyExists(FORM, 'changed_pass')>
                 <cfset hashed_pass = Hash(FORM.changed_pass, "SHA-512")>
                 <cfset old_hashed_pass = Hash(FORM.old_pass, "SHA-512")>
@@ -261,7 +262,7 @@ DATE MODIFIED:
                     
 		<cfif isDefined("url.init") >
     		<cfset onApplicationStart()>
-   		</cfif>--->
+   		</cfif>
             
     </cffunction>
 </cfcomponent>
