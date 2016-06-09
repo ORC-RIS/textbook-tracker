@@ -8,7 +8,7 @@
     
     <!--- create and initialize user object --->
     <cfset User = CreateObject("components/user") />
-    <cfset User.init(Application.datasource, "admin", "") />
+    <cfset User.init(Application.datasource, "John", "") />
 
     <!--- retrieve some fields --->
     <cfset username = User.getFirstName() />

@@ -217,8 +217,9 @@ DATE MODIFIED:
                             SELECT  username 
                             FROM    Users2
                             WHERE   password = 
-                                <cfqueryparam cfsqltype="cf_sql_varchar" value='#old_hashed_pass#'>
+                                <cfqueryparam cfsqltype="cf_sql_varchar" value='#old_hashed_pass#'> 
                 </cfquery>
+
 
                 <!--- make sure that their old password is correct before attempting to change it --->
                 <cfif #passChangeVerifQuery.username# IS "">
@@ -255,7 +256,7 @@ DATE MODIFIED:
             <cfquery name="loginQuery2" datasource="#GLOBAL_DATASOURCE#">
                         SELECT *
                         FROM Users2
-                        WHERE username =
+                        WHERE username = 
                             <cfqueryparam cfsqltype="cf_sql_varchar" value='#getAuthUser()#'>
             </cfquery>
 
