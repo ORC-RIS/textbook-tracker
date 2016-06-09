@@ -27,8 +27,8 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
     
     <cffunction name="getUserInformation" access="private" returntype="query" hint="returns a tuple that contains all of the user's information">
         <!--- query that will fetch user's information --->
-        <cfstoredproc datasource="#variables.datasource#" procedure="usp_GetUserInfo" >
-            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@username" value="#variables.username#">
+        <cfstoredproc datasource="#application.datasource#" procedure="usp_GetUserInfo" >
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@username" value="#getAuthUser()#">
             <cfprocresult name="userInformation">
         </cfstoredproc>
         <cfreturn userInformation>
@@ -111,6 +111,12 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
     <cffunction name="getEmail" access="public" returntype="string" hint="returns the user's email">
         <cfreturn getUserInformation().email>
     </cffunction>
+
+    <cffunction name="getUserRole" access="public" returntype="string" hint="returns the user's access level/role">
+        <cfreturn getUserInformation().userRole>
+    </cffunction>
+
+
     <!--- end getters --->
 
 </cfcomponent>

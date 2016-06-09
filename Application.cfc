@@ -31,6 +31,7 @@ DATE MODIFIED:
                 returntype="void"
                 output="false"
                 hint="Fires when the session is first created.">
+                <cfabort showerror="Test">
                 <cfreturn />
     </cffunction>
                     
@@ -47,6 +48,9 @@ DATE MODIFIED:
         <!--- datasource variable --->
         <cfset Application.datasource = this.datasource>
 		<cfset GLOBAL_DATASOURCE = this.datasource>
+        
+        <!--- Create component of the logged in user (Initially declared blank until they log in) --->
+        <cfset LoggedUser = CreateObject("components/user") />
 
         <!--- create components that will be used for verifying login --->
         <cfset User_Verif = CreateObject("components/user") />
@@ -104,6 +108,11 @@ DATE MODIFIED:
           <cfabort>
         </cfif>
 
+        <cfif "#target#" IS "/checkout.cfm">
+          <cfinclude template="checkout.cfm">
+          <cfabort>
+        </cfif>
+
         <!--- if the user has attempted to sign out using a form, sign the user out --->
         <cfif structKeyExists(FORM, 'logout')>
             <cflogout>
@@ -117,6 +126,7 @@ DATE MODIFIED:
                 <cfset new_pass = RandRange(10000, 99999)>
                 <cfset new_pass_hash = Hash(new_pass, "SHA-512")>
 
+<!--- Probably Delete --->
                 <cfset User_Recov.init(Application.datasource, "", "#URL.email#") />
                 <cfset resetEmailQuery = User_Recov.recoverPassword("#URL.email#") >
 
@@ -160,7 +170,7 @@ DATE MODIFIED:
                     <cfabort>
                 <cfelse>
                     <cfset pass_hash = HASH('#cflogin.password#', 'SHA-512')>
-
+                    
                     <!--- use the component to verify the user's username-password combination --->
                     <cfset User_Verif.init(Application.datasource, "#cflogin.name#", "") />
 
@@ -199,14 +209,15 @@ DATE MODIFIED:
             <cfelseif structKeyExists(FORM, 'changed_pass')>
                 <cfset hashed_pass = Hash(FORM.changed_pass, "SHA-512")>
                 <cfset old_hashed_pass = Hash(FORM.old_pass, "SHA-512")>
-
+              
                 <!--- create new user object/component --->
                 <cfset User_Verif_Change_Pass = CreateObject("components/user") />
                 <cfset User_Verif_Change_Pass.init(Application.datasource, "#getAuthUser()#", "") />
-                
+
                 <cfset loginQuery2 = User_Verif_Change_Pass.verifyUsernamePasswordCombo("#getAuthUser()#", "#old_hashed_pass#") >
                 
                 <!--- make sure that their old password is correct before attempting to change it --->
+
                 <cfif #loginQuery2.username# IS "">
                     <cfoutput> 
                         <div class="alert alert-danger">
@@ -236,13 +247,11 @@ DATE MODIFIED:
         <cfif getAuthUser() NEQ "">  
 
             <!--- create new user object/component --->
-            <cfset Send_User_to_Dashboard = CreateObject("components/user") />
-            <cfset Send_User_to_Dashboard.init (Application.datasource, "#getAuthUser()#", "") />
+            <!--- <cfset LoggedUser = CreateObject("components/user") /> --->
+            <cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
 
             <!--- NEEDS TO CHECK THEIR ROLES IN THE FUTURE --->
-            <cfset User_Object_Name = Send_User_to_Dashboard.getUsername()>
-
-            <cfif #User_Object_Name# IS 'admin'>
+            <cfif #LoggedUser.getUserRole()# IS 'admin'>
                 <!--- if admin is trying to 'view all users' --->
                 <cfif structKeyExists(FORM, 'view_users')>
                     <cfinclude template="users_view.cfm">
