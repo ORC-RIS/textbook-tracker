@@ -28,7 +28,7 @@ DATE MODIFIED:
 		<!--- test, be sure to remove --->
 		<cfoutput>logged in as user: <h4>#getAuthUser()#</h4></cfoutput>
 	</div>
-
+	
 	<div>
 		<div>
 			<h3>CURRENT INVENTORY:</h3>
@@ -55,7 +55,7 @@ DATE MODIFIED:
 						<td>#Title#</td>
 						<td align="center">
 							<cfif Quantity GTE 1>
-								<form id="book-actions" action="checkout.cfm" method="GET">
+								<form id="book-actions" action="checkout.cfm" method="POST">
 									<button name="CheckoutBook" type="submit" form="book-actions" value="#BookID#">Checkout</button>
 								</form>
 								<cfelse>

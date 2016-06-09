@@ -33,21 +33,25 @@ DATE MODIFIED:
             <cfset Book = CreateObject("components/qry_book") />
             <cfset Book.init(datasource) />
 
-			
-			<cfset bookID = #url.CheckoutBook# />
-			<cfset book = Book.getBook(bookID) />
-
-    		<cfdump var="#book#" >
-          
 			<!--- retrieve book component from bookstore --->
-			
-			<!--- retrieve user component from bookstore --->
+            <cfset bookID = #FORM.CheckoutBook# />
+            <cfset book = Book.getBook(bookID) />
+
+			<!--- retrieve userID from session --->
+			<cfset userID = #getAuthUser()#>
             
+			<!--- verify book --->
+    		<cfdump var="#getAuthUser()#" >
+          
+			
+            <!--- Add button to confirm checkout--->
+            <!--- if button is pressed --->
             <!--- Create a Loan Object--->
             <cfset Checkout = CreateObject("components/qry_checkout") />
 
             <!--- Call the Checkout's constructor and pass in the datasource--->
             <cfset Checkout.init(datasource) />
+           <!---  <cfset newCheckout = Checkout.createCheckout(userID, bookID) /> --->
             
 			<!--- verify Loan object--->
             
