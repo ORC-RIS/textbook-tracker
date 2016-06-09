@@ -26,7 +26,7 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
 
         <!--- takes username and returns set of all attributes attached to said user in the database--->
         <!--- OR takes their email address (only to be used to retrieving username or password) --->
-        <cfargument name="username" type="string" required="yes" />
+        <cfargument name="username" type="string" required="no" />
         <cfargument name="email" type="string" required="no" />
         
         <cfset variables.datasource = arguments.datasource />
@@ -34,9 +34,6 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
         <cfset variables.email = arguments.email />
     </cffunction>
     
-    <!--- NOT NECESSARY, REMOVE ME ONCE THIS IS CONFIRMED --->
-    <cfset userID_p = 2>
-
     <cffunction name="getUserInformation" access="private" returntype="query" hint="returns a tuple that contains all of the user's information">
         <!--- query that will fetch user's information --->
         <cfstoredproc datasource="#variables.datasource#" procedure="usp_GetUserInfo" >
@@ -75,13 +72,31 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
         <cfreturn emailPassTuple>
     </cffunction>
 
-    <cffunction name="updatePassword" access="public" returntype="query" hint="updates the user's password">
+    <cffunction name="updatePassword" access="public" returntype="void" hint="updates the user's password">
         <cfargument name="email" type="string" required="yes" />
         <cfargument name="password" type="string" required="yes" />
         <cfstoredproc datasource="#variables.datasource#" procedure="usp_UpdatePassword" >
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@new_pass_hash" value="#password#">
             <cfprocresult name="updatePass">
+        </cfstoredproc>
+    </cffunction>
+
+    <cffunction name="addUserToDatabase" access="public" returntype="void" hint="adds the user to the database">
+        <cfargument name="username" type="string" required="yes" />
+        <cfargument name="password" type="string" required="yes" />
+        <cfargument name="firstname" type="string" required="yes" />
+        <cfargument name="lastname" type="string" required="yes" />
+        <cfargument name="email" type="string" required="yes" />
+        <cfargument name="role" type="string" required="yes" />
+        <cfstoredproc datasource="#variables.datasource#" procedure="usp_CreateUser" >
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@username" value="#username#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@password" value="#password#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@firstname" value="#firstname#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@lastname" value="#lastname#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@role" value="#role#">
+            <cfprocresult name="addUser">
         </cfstoredproc>
     </cffunction>
 

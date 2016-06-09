@@ -54,7 +54,8 @@ DATE MODIFIED:
 
         <!--- change URLs based on #target# --->
         <!--- maybe I should make an array called 'allowed pages' or something --->
-        <cfif "#target#" IS "/registration.cfm">
+
+        <!---<cfif "#target#" IS "/registration.cfm">
           <cfinclude template="registration.cfm">
           <cfabort>
         </cfif>
@@ -117,25 +118,12 @@ DATE MODIFIED:
                 <cfset new_pass = RandRange(10000, 99999)>
                 <cfset new_pass_hash = Hash(new_pass, "SHA-512")>
 
-<!---                 <cfquery name="resetEmailQuery" datasource="#GLOBAL_DATASOURCE#">
-                        SELECT email, password
-                        FROM Users2
-                        WHERE email = 
-                            <cfqueryparam cfsqltype="cf_sql_varchar" value='#URL.email#'>
-                </cfquery> --->
-
+<!--- Probably Delete --->
                 <cfset User_Recov.init(Application.datasource, "", "#URL.email#") />
                 <cfset resetEmailQuery = User_Recov.recoverPassword("#URL.email#") >
 
                 <cfif "#Hash(resetEmailQuery.password)#" IS URL.code>
-                    <!--- <cfquery name="resetEmailQueryPasswordUpdate" datasource="#GLOBAL_DATASOURCE#">
-                            UPDATE  Users2
-                            SET     password = '#new_pass_hash#'
-                            WHERE   email = 
-                                <cfqueryparam cfsqltype="cf_sql_varchar" value='#URL.email#'>
-                    </cfquery> --->
-                    <cfset User_Recov.updatePassword(#URL.email#, #new_pass_hash#) />
-                    <!--- <cfinvoke method="updatePassword" component="User_Recov" returntype="void"> --->
+                    <cfset sucess_bool = User_Recov.updatePassword("#URL.email#", "#new_pass_hash#") />
                 <cfelse>
                         <div class="alert alert-danger">
                             This page has expired.
@@ -212,17 +200,16 @@ DATE MODIFIED:
             <cfelseif structKeyExists(FORM, 'changed_pass')>
                 <cfset hashed_pass = Hash(FORM.changed_pass, "SHA-512")>
                 <cfset old_hashed_pass = Hash(FORM.old_pass, "SHA-512")>
+              
+                <!--- create new user object/component --->
+                <cfset User_Verif_Change_Pass = CreateObject("components/user") />
+                <cfset User_Verif_Change_Pass.init(Application.datasource, "#getAuthUser()#", "") />
+
+                <cfset loginQuery2 = User_Verif_Change_Pass.verifyUsernamePasswordCombo("#getAuthUser()#", "#old_hashed_pass#") >
                 
-                <cfquery name="passChangeVerifQuery" datasource="#GLOBAL_DATASOURCE#">
-                            SELECT  username 
-                            FROM    Users2
-                            WHERE   password = 
-                                <cfqueryparam cfsqltype="cf_sql_varchar" value='#old_hashed_pass#'> 
-                </cfquery>
-
-
                 <!--- make sure that their old password is correct before attempting to change it --->
-                <cfif #passChangeVerifQuery.username# IS "">
+
+                <cfif #loginQuery2.username# IS "">
                     <cfoutput> 
                         <div class="alert alert-danger">
                             Incorrect password, please try again. For security, the current session will now close.
@@ -234,12 +221,8 @@ DATE MODIFIED:
                 </cfif>
 
                 <!--- their old password is correct, allow them to change it at will then --->
-                <cfquery name="passChangeQuery" datasource="#GLOBAL_DATASOURCE#">
-                            UPDATE  Users2 
-                            SET     password = '#hashed_pass#'
-                            WHERE   username = 
-                                <cfqueryparam cfsqltype="cf_sql_varchar" value='#getAuthUser()#'>
-                </cfquery>
+                <!--- first, get their email, which should be tied to their username (which we passed to the init function for this object) --->
+                <cfset sucess_bool = User_Verif_Change_Pass.updatePassword("#User_Verif_Change_Pass.getEmail()#", "#hashed_pass#") />
 
                 <cfoutput>
                     <div class="alert alert-success">
@@ -253,14 +236,15 @@ DATE MODIFIED:
 
         <!--- logic for sending the logged-in user to their respective dashboard, based on whether or not the user has admin privileges --->
         <cfif getAuthUser() NEQ "">  
-            <cfquery name="loginQuery2" datasource="#GLOBAL_DATASOURCE#">
-                        SELECT *
-                        FROM Users2
-                        WHERE username = 
-                            <cfqueryparam cfsqltype="cf_sql_varchar" value='#getAuthUser()#'>
-            </cfquery>
 
-            <cfif #loginQuery2.username# IS 'admin'>
+            <!--- create new user object/component --->
+            <cfset Send_User_to_Dashboard = CreateObject("components/user") />
+            <cfset Send_User_to_Dashboard.init (Application.datasource, "#getAuthUser()#", "") />
+
+            <!--- NEEDS TO CHECK THEIR ROLES IN THE FUTURE --->
+            <cfset User_Object_Name = Send_User_to_Dashboard.getUsername()>
+
+            <cfif #User_Object_Name# IS 'admin'>
                 <!--- if admin is trying to 'view all users' --->
                 <cfif structKeyExists(FORM, 'view_users')>
                     <cfinclude template="users_view.cfm">
@@ -280,7 +264,8 @@ DATE MODIFIED:
                     
 		<cfif isDefined("url.init") >
     		<cfset onApplicationStart()>
-   		</cfif>
+
+   		</cfif>--->
             
     </cffunction>
 </cfcomponent>

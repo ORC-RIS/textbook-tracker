@@ -44,13 +44,7 @@ DATE MODIFIED:
             <!--- Object to hold return data--->
             <cfset allBooks = Book.getAllBooks() />
 
-			<style type="text/css">
-				table {border-collapse: collapse;}
-				table tr:nth-child(even) {background-color: #f2f2f2;}
-			</style>
-
-			<table width="1000" cellspacing="0" border="1">
-				<tr bgcolor="#d0d0d0">
+			<table width="1000" align="center" cellspacing="0" border="1">
 					<th>ISBN</th>
 					<th>Title</th>
 					<th>Availability</th>
@@ -61,8 +55,8 @@ DATE MODIFIED:
 						<td>#Title#</td>
 						<td align="center">
 							<cfif Quantity GTE 1>
-								<form id="book-actions" action="../checkout.cfm" method="GET">
-									<button name="CheckoutBook" type="submit" form="book-actions" value="#ISBN#">Checkout</button>
+								<form id="book-actions" action="checkout.cfm" method="GET">
+									<button name="CheckoutBook" type="submit" form="book-actions" value="#BookID#">Checkout</button>
 								</form>
 								<cfelse>
 									<button form="book-actions">Email Waitlist</button>
