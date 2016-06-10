@@ -9,7 +9,7 @@
       </div> <p></p>
 
       <div class="container">
-        <form class="form-horizontal" action="index.cfm" method="POST">
+        <form class="form-horizontal" action="/security.cfm" method="POST">
           <div class="form-group">
             <label class="control-label col-sm-2">Old Password:</label>
               <div class="col-sm-10">
@@ -32,7 +32,7 @@
 
       <div class="container">
         <div class="form-group">
-          <form action="index.cfm" method="POST" style="float: right; margin-left: 10px">
+          <form action="/security.cfm" method="POST" style="float: right; margin-left: 10px">
               <input type="submit" class="btn btn-default" value="Cancel" name="back">
           </form>
         </div>

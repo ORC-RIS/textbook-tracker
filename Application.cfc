@@ -2,6 +2,7 @@
 DESCRIPTION: Application component
 CREATED BY: David Elliott,
             John Lynch,
+            Raphael Saint-Louis
 DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
@@ -16,7 +17,7 @@ DATE MODIFIED:
     <cfset this.sessionTimeout =  CreateTimeSpan( 0, 0, 30, 0 ) />
 	<cfset this.sessionManagement = true>
     <cfset this.setclientcookies = true>
-    <cfset role = "not_set">
+    <cfset role = "not_set"> 
     
     <cffunction name="onApplicationStart"
     			access="public"
@@ -31,7 +32,6 @@ DATE MODIFIED:
                 returntype="void"
                 output="false"
                 hint="Fires when the session is first created.">
-                <cfabort showerror="Test">
                 <cfreturn />
     </cffunction>
                     
@@ -49,74 +49,9 @@ DATE MODIFIED:
         <cfset Application.datasource = this.datasource>
 		<cfset GLOBAL_DATASOURCE = this.datasource>
         
-        <!--- Create component of the logged in user (Initially declared blank until they log in) --->
-        <cfset LoggedUser = CreateObject("components/user") />
-
         <!--- create components that will be used for verifying login --->
         <cfset User_Verif = CreateObject("components/user") />
         <cfset User_Recov = CreateObject("components/user") />
-
-        <!--- change URLs based on #target# --->
-        <!--- maybe I should make an array called 'allowed pages' or something --->
-        <cfif "#target#" IS "/registration.cfm">
-          <cfinclude template="registration.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/forgotten_name.cfm">
-          <cfinclude template="forgotten_name.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/forgotten_pass.cfm">
-          <cfinclude template="forgotten_pass.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/user_homepage.cfm">
-          <cfinclude template="user_homepage.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/admin_page.cfm">
-          <cfinclude template="admin_page.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/users_view.cfm">
-          <cfinclude template="users_view.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/pass_change_form.cfm">
-          <cfinclude template="pass_change_form.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/action_page.cfm">
-          <cfinclude template="action_page.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/bookstore.cfm">
-          <cfinclude template="bookstore.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "confirmation_un.cfm">
-          <cfinclude template="confirmation_un.cfm">
-          <cfabort>
-        </cfif>
-
-        <cfif "#target#" IS "/checkout.cfm">
-          <cfinclude template="checkout.cfm">
-          <cfabort>
-        </cfif>
-
-        <!--- if the user has attempted to sign out using a form, sign the user out --->
-        <cfif structKeyExists(FORM, 'logout')>
-            <cflogout>
-        </cfif>
 
         <!--- check to see if the user is attempting to verify their change password request via GET --->
         <!--- this does not care whether or not the user is logged in --->
@@ -156,9 +91,14 @@ DATE MODIFIED:
         <!--- checks to see if the user is logged in, if not, attempts to log the user into the system --->
         <cflogin>
             <!--- if the user has NOT sent the login form --->
+            <!--- then the user should ONLY be able to access the pages accessible from the login page --->
             <cfif NOT isDefined("cflogin")>
-                <cfinclude template="login.cfm" />
-                <cfabort>
+                <cfif "#CGI.script_name#" contains "public" OR "#CGI.script_name#" IS "/index.cfm">
+                    <cfbreak>
+                <cfelse>
+                    <cfinclude template="index.cfm">
+                    <cfabort>
+                </cfif>
             <cfelse>
                 <cfif cflogin.name IS "" OR cflogin.password IS "">
                     <cfoutput>
@@ -166,9 +106,10 @@ DATE MODIFIED:
                             Username or password missing.
                         </div>  
                     </cfoutput>
-                    <cfinclude template="login.cfm" />
+                    <cfinclude template="/public/login.cfm" />
                     <cfabort>
                 <cfelse>
+                    <!--- ADD TO SECURITY.CFM or something --->
                     <cfset pass_hash = HASH('#cflogin.password#', 'SHA-512')>
                     
                     <!--- use the component to verify the user's username-password combination --->
@@ -188,7 +129,7 @@ DATE MODIFIED:
                                 Invalid login information, please try again.
                             </div>
                         </cfoutput>
-                        <cfinclude template="login.cfm" />
+                        <cfinclude template="/public/login.cfm" />
                         <cfabort>
                     </cfif>
                 
@@ -196,82 +137,6 @@ DATE MODIFIED:
             
             </cfif>
         </cflogin>
-
-        <!--- check to make sure that the user is logged in --->
-        <!--- logic for pass_change_form.cfm --->
-        <cfif getAuthUser() NEQ "">
-            <!--- if user tries to change password, take them to password change form --->
-            <cfif structKeyExists(FORM, 'change_pass')>
-                <cflocation 
-                    url="pass_change_form.cfm"
-                    addtoken="false">
-            <!--- checks to see if the user has attemped to change their password (ie, user is coming from password change form) --->
-            <cfelseif structKeyExists(FORM, 'changed_pass')>
-                <cfset hashed_pass = Hash(FORM.changed_pass, "SHA-512")>
-                <cfset old_hashed_pass = Hash(FORM.old_pass, "SHA-512")>
-              
-                <!--- create new user object/component --->
-                <cfset User_Verif_Change_Pass = CreateObject("components/user") />
-                <cfset User_Verif_Change_Pass.init(Application.datasource, "#getAuthUser()#", "") />
-
-                <cfset loginQuery2 = User_Verif_Change_Pass.verifyUsernamePasswordCombo("#getAuthUser()#", "#old_hashed_pass#") >
-                
-                <!--- make sure that their old password is correct before attempting to change it --->
-
-                <cfif #loginQuery2.username# IS "">
-                    <cfoutput> 
-                        <div class="alert alert-danger">
-                            Incorrect password, please try again. For security, the current session will now close.
-                        </div>
-                        <cfinclude template="login.cfm">
-                    </cfoutput>
-                    <cflogout>
-                    <cfabort>
-                </cfif>
-
-                <!--- their old password is correct, allow them to change it at will then --->
-                <!--- first, get their email, which should be tied to their username (which we passed to the init function for this object) --->
-                <cfset sucess_bool = User_Verif_Change_Pass.updatePassword("#User_Verif_Change_Pass.getEmail()#", "#hashed_pass#") />
-
-                <cfoutput>
-                    <div class="alert alert-success">
-                        Password changed successfully
-                    </div>  
-                </cfoutput>
-                
-                <cflogout>
-            </cfif>
-        </cfif>
-
-        <!--- logic for sending the logged-in user to their respective dashboard, based on whether or not the user has admin privileges --->
-        <cfif getAuthUser() NEQ "">  
-
-            <!--- create new user object/component --->
-            <!--- <cfset LoggedUser = CreateObject("components/user") /> --->
-            <cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
-
-            <!--- NEEDS TO CHECK THEIR ROLES IN THE FUTURE --->
-            <cfif #LoggedUser.getUserRole()# IS 'admin'>
-                <!--- if admin is trying to 'view all users' --->
-                <cfif structKeyExists(FORM, 'view_users')>
-                    <cfinclude template="users_view.cfm">
-                    <cfabort>
-                </cfif>
-                <!--- user = admin; display header --->
-                <cflocation 
-                    url = "admin_page.cfm" 
-                    addToken = "no" />  
-            <!--- otheriwse if user's name isn't 'admin' --->
-            <cfelse>
-                <cflocation 
-                    url = "user_homepage.cfm" 
-                    addToken = "no" />          
-            </cfif>
-        </cfif>
-                    
-		<cfif isDefined("url.init") >
-    		<cfset onApplicationStart()>
-   		</cfif>
             
     </cffunction>
 </cfcomponent>

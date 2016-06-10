@@ -20,7 +20,7 @@
     </div>
 
     <div class="container">
-  	  <form action="index.cfm" method="POST">
+  	  <form action="/security.cfm" method="POST">
   		  <input type="submit" value="Sign Out" class="btn btn-default" name="logout">
   		  <input type="submit" value="Change Password" class="btn btn-default" name="change_pass">
   	  </form>

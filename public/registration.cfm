@@ -1,5 +1,5 @@
 <html>
-  <cfinclude template="includes/header.cfm">
+  <cfinclude template="/includes/header.cfm">
   
   <body>
     <div class="jumbotron">
@@ -139,7 +139,7 @@
       </div>
 
       <div class="container">
-        <form action="index.cfm" align="center" method="POST">
+        <form action="../index.cfm" align="center" method="POST">
           <input type="submit" class="btn btn-default" value="Back" name="register">
         </form>
       </div>
@@ -147,5 +147,5 @@
     </div>    
   </body>
 
-  <cfinclude template="includes/footer.cfm">
+  <cfinclude template="/includes/footer.cfm">
 <html>

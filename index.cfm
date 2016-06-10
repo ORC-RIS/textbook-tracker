@@ -1,1 +1,1 @@
-<cfinclude template="login.cfm">
+<cfinclude template="/public/login.cfm">

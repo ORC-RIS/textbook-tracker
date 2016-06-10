@@ -74,7 +74,7 @@ DATE MODIFIED:
 		</cfinput>
 	</cfform> --->
 	<hr>
-    <form action="../index.cfm" align="center" method="POST">
+    <form action="/security.cfm" align="center" method="POST">
     	<input type="submit" class="btn btn-default" value="Back" name="return_from_books">
     </form>
       

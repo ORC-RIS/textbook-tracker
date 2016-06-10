@@ -1,5 +1,5 @@
 <html>
-  <cfinclude template="includes/header.cfm">
+  <cfinclude template="/includes/header.cfm">
   
   <cfquery name="allUsersQuery" datasource="#GLOBAL_DATASOURCE#" result="tmpResult">
         SELECT username, first_name, last_name, email, role
@@ -45,24 +45,12 @@
                 </tr> 
               </cfoutput>
               </table>
-<!---               <cfloop query="allUsersQuery">
-                <tr>
-                  <th scope="row"><cfoutput>#tuple_position#</cfoutput><cfset tuple_position = tuple_position + 1></th>
-                  <cfoutput><td>#allUsersQuery.username#</td></cfoutput>
-                  <cfoutput><td>#allUsersQuery.first_name#</td></cfoutput>
-                  <cfoutput><td>#allUsersQuery.last_name#</td></cfoutput>
-                  <cfoutput><td>#allUsersQuery.email#</td></cfoutput>
-                </tr>
-              </cfloop>
-            </tbody>
-          </table> --->
-        
         </div>
         </p>
       </div>
       
       <div class="container">
-        <form action="index.cfm" method="POST">
+        <form action="/security.cfm" method="POST">
           <input type="submit" value="Back" class="btn btn-default" name="back">
         </form> 
       </div>
@@ -70,5 +58,5 @@
     </div>
   </body>
 
-  <cfinclude template="includes/footer.cfm">
+  <cfinclude template="/includes/footer.cfm">
 </html>

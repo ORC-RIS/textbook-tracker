@@ -18,13 +18,13 @@
 
       <cfif structKeyExists(FORM, 'view_users')>
         <cflocation 
-          url = "users_view.cfm" 
+          url = "/admin/users_view.cfm" 
           addToken = "no" />
           <cfabort>
       </cfif>
 
       <div class="container">
-        <form action="users_view.cfm" method="POST">
+        <form action="/admin/users_view.cfm" method="POST">
           <div class="banner">
             <input type="submit" value="View Users" class="btn btn-info" name="view_users">
           </div>
