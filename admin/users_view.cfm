@@ -1,15 +1,10 @@
 <html>
   <cfinclude template="/includes/header.cfm">
   
-  <cfquery name="allUsersQuery" datasource="#GLOBAL_DATASOURCE#" result="tmpResult">
-        SELECT username, first_name, last_name, email, role
-        FROM Users2
-        WHERE username <>
-  <cfqueryparam cfsqltype ="cf_sql_varchar" value="admin">
-  </cfquery>
+  <cfset User = CreateObject("components/user") />
+  <cfset User.init(Application.datasource, "#getAuthUser()#", "") />
 
-  <!--- <cfdump var="allUsersQuery"> --->
-  <cfset tuple_position = 1>
+  <cfset allUsersQuery = User.getAllUsers() >
 
   <body>
     <div class ="jumbotron">
@@ -38,10 +33,10 @@
                 <tr>
                   <th>#allUsersQuery.CurrentRow#</th>
                   <td>#allUsersQuery.username#</td>
-                  <td>#allUsersQuery.first_name#</td>
-                  <td>#allUsersQuery.last_name#</td>
+                  <td>#allUsersQuery.firstname#</td>
+                  <td>#allUsersQuery.lastname#</td>
                   <td>#allUsersQuery.email#</td>
-                  <td>#allUsersQuery.role#</td>
+                  <td>#allUsersQuery.userrole#</td>
                 </tr> 
               </cfoutput>
               </table>

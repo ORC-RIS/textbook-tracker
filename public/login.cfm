@@ -1,6 +1,10 @@
 <html> 
   <cfinclude template="/includes/header.cfm">
 
+<cfdump var="#Now()#">
+
+<!--- {ts '2016-06-10 14:46:00'} --->
+
   <body>
     <div class="jumbotron">
       <div class="container">

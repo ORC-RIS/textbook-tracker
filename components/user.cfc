@@ -28,7 +28,7 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
     <cffunction name="getUserInformation" access="private" returntype="query" hint="returns a tuple that contains all of the user's information">
         <!--- query that will fetch user's information --->
         <cfstoredproc datasource="#application.datasource#" procedure="usp_GetUserInfo" >
-            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@username" value="#getAuthUser()#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@username" value="#username#">
             <cfprocresult name="userInformation">
         </cfstoredproc>
         <cfreturn userInformation>
@@ -52,6 +52,15 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
             <cfprocresult name="emailNameTuple">
         </cfstoredproc>
         <cfreturn emailNameTuple>
+    </cffunction>
+ 
+     <cffunction name="getUsernameFromUID" access="public" returntype="query" hint="returns a tuple containing username/email">
+        <cfargument name="userid" type="string" required="yes" />
+        <cfstoredproc datasource="#variables.datasource#" procedure="usp_GetUsernameFromUID" >
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@userid" value="#userid#">
+            <cfprocresult name="username">
+        </cfstoredproc>
+        <cfreturn username>
     </cffunction>
 
     <cffunction name="recoverPassword" access="public" returntype="query" hint="returns a tuple containing username/email/password">
@@ -88,6 +97,23 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@role" value="#role#">
             <cfprocresult name="addUser">
+        </cfstoredproc>
+    </cffunction>
+
+    <cffunction name="getAllUsers" access="public" returntype="query" hint="grabs everyone's information">
+        <cfstoredproc datasource="#variables.datasource#" procedure="usp_GetAllUsers" >
+            <cfprocresult name="allUsers">
+        </cfstoredproc>
+        <cfreturn allUsers>
+    </cffunction>
+
+    <cffunction name="associateCodeWithEmail" access="public" returntype="void" hint="inserts an email and a code into a table">
+        <cfargument name="email" type="string" required="yes" />
+        <cfargument name="secure_code" type="string" required="yes" />
+        <cfstoredproc datasource="#variables.datasource#" procedure="usp_AssociateCodeWithEmail" >
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@secure_code" value="#secure_code#">
+            <cfprocresult name="associatedTuples">
         </cfstoredproc>
     </cffunction>
 

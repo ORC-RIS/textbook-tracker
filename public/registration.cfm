@@ -32,8 +32,8 @@
 
         <cfset retrieved_username = User_Registration_Object.getUsername()>
       
-        <!--- if query.username is not empty, then the username already exists in our database, which is a problem, 
-        since our key constraint doesn't allow us to have two tuples in the DB with the same username --->
+     <!---    <cfdump var="#User_Registration_Object.getUsername()#">
+        <cfabort> --->
 
         <cfif retrieved_username NEQ "">
           <cfoutput>

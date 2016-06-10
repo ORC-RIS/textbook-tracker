@@ -7,6 +7,7 @@
 
 <!--- create the user object/component --->
 <cfset LoggedUser = CreateObject("components/user") />
+<cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
 
 <!--- check to see if the user is trying to access a page for which he/she doesn't have permission to view --->
 <cfif "#CGI.script_name#" contains "admin">
@@ -15,24 +16,7 @@
     </cfif>
 </cfif>
 
-<!--- user is logged in but is trying to access admin pages --->
-<!--- should check for role, not username --->
-<!--- <cfif getAuthUser() NEQ 'admin'>
-	<cfif #CGI.SCRIPT_NAME# EQ '/users_view.cfm'>
-		<cflocation 
-			url="user_homepage.cfm"
-			addtoken="false" />
-	</cfif>
-</cfif> --->
-
-<cfquery name="loginQuery2" datasource="#GLOBAL_DATASOURCE#">
-          SELECT *
-          FROM Users2
-          WHERE username = '#getAuthUser()#'
-</cfquery>
-
 <!--- "logged in as" header message --->
-
 <!--- Replaced getAuthUser() with isDefined("LoggedUser") --->
 <cfif getAuthUser() NEQ "">
 	<cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
@@ -40,7 +24,7 @@
       <div class="row-fluid">
         <div class="span6 pull-right" style="text-align:right">
         	<cfoutput>
-        		Logged in as #LoggedUser.getFirstName()# #LoggedUser.getLastName()#<br/>
+        		Name: #LoggedUser.getFirstName()# #LoggedUser.getLastName()#<br/>
         		Role: #LoggedUser.getUserRole()#
         	</cfoutput>
         </div>

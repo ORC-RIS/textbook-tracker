@@ -5,6 +5,51 @@
     <cflocation url="/index.cfm" addtoken="false">
 </cfif>
 
+<!--- check to see if the user is attempting to verify their change password request via GET --->
+<!--- this does not care whether or not the user is logged in --->
+<cfdump var="#CGI#">
+<cfabort>
+<cfset User_Recov = CreateObject("components/user") />
+<cfif structKeyExists(URL,'uid')>
+    <cfif structKeyExists(URL,'code')>
+        <!--- generate a new `password` for the user ahead of time --->
+        <cfset new_pass = RandRange(10000, 99999)>
+        <cfset new_pass_hash = Hash(new_pass, "SHA-512")>
+
+        <cfset User_Recov.init(Application.datasource, "", "") />
+        <cfset username = User_Recov.getUsernameFromUID("#URL.uid#") />
+
+        <!--- now that we have the user's username, we can make construct a new object that will contain the email we need --->
+        <cfset Complete_User_Object = CreateObject("components/user") />
+        <cfset Complete_User_Object.init(Application.datasource, "#username#", "") />
+        
+        <cfset email = Complete_User_Object.getEmail() />
+
+
+        <cfif "#Hash(resetEmailQuery.password)#" IS URL.code>
+            <cfset sucess_bool = User_Recov.updatePassword("#email#", "#new_pass_hash#") />
+        <cfelse>
+                <div class="alert alert-danger">
+                    This page has expired.
+                </div>
+            <cfabort>
+        </cfif>
+
+        <div class="alert alert-success">
+            Your password has been reset. Your new, temporary password has been sent to your email address.
+        </div>
+
+        <cfmail 
+            from="noreply@webdev1.research.ucf.edu" 
+            to="#resetEmailQuery.email#" 
+            subject="Password Reset">Your password has been successfully reset. Your new password is <cfoutput>#new_pass#</cfoutput>. This is only a temporary password and should be changed as soon as possible.
+        </cfmail>
+
+        <cfabort>
+    </cfif>
+</cfif>
+
+
 <!--- check to make sure that the user is logged in --->
 <!--- logic for pass_change_form.cfm --->
 <cfif getAuthUser() NEQ "">
@@ -51,7 +96,6 @@
 
 <!--- logic for sending the logged-in user to their respective dashboard, based on whether or not the user has admin privileges --->
 <cfif getAuthUser() NEQ "">  
-
     <!--- create new user object/component --->
     <cfset LoggedUser = CreateObject("components/user") />
     <cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
@@ -72,7 +116,6 @@
             url = "user_homepage.cfm" 
             addToken = "no" />          
     </cfif>
-
 </cfif>
             
 <cfif isDefined("url.init") >

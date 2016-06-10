@@ -13,23 +13,13 @@ DATE MODIFIED:
 <html>
 	<cfoutput>
 		<link href="styles/bookstoreCSS.css" rel="stylesheet" type="text/css">
-	 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-	 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</cfoutput>
 
 <head>
-	<title>RIS Textbook Management</title>
+	<cfinclude template="/includes/header.cfm">
 </head>
 
 <body>
-
-	<header>
-		<h1>TEXTBOOK TRACKER</h1>
-
-		<!--- test, be sure to remove --->
-		<cfoutput>logged in as user: <h4>#getAuthUser()#</h4></cfoutput>
-	</header>
 
 	<div class="container-fluid">
 		<div class="content">

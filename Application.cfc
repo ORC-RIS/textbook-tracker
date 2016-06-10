@@ -51,42 +51,6 @@ DATE MODIFIED:
         
         <!--- create components that will be used for verifying login --->
         <cfset User_Verif = CreateObject("components/user") />
-        <cfset User_Recov = CreateObject("components/user") />
-
-        <!--- check to see if the user is attempting to verify their change password request via GET --->
-        <!--- this does not care whether or not the user is logged in --->
-        <cfif structKeyExists(URL,'email')>
-            <cfif structKeyExists(URL,'code')>
-                <!--- generate a new `password` for the user ahead of time --->
-                <cfset new_pass = RandRange(10000, 99999)>
-                <cfset new_pass_hash = Hash(new_pass, "SHA-512")>
-
-<!--- Probably Delete --->
-                <cfset User_Recov.init(Application.datasource, "", "#URL.email#") />
-                <cfset resetEmailQuery = User_Recov.recoverPassword("#URL.email#") >
-
-                <cfif "#Hash(resetEmailQuery.password)#" IS URL.code>
-                    <cfset sucess_bool = User_Recov.updatePassword("#URL.email#", "#new_pass_hash#") />
-                <cfelse>
-                        <div class="alert alert-danger">
-                            This page has expired.
-                        </div>
-                    <cfabort>
-                </cfif>
-
-                <div class="alert alert-success">
-                    Your password has been reset. Your new, temporary password has been sent to your email address.
-                </div>
-
-                <cfmail 
-                    from="noreply@webdev1.research.ucf.edu" 
-                    to="#resetEmailQuery.email#" 
-                    subject="Password Reset">Your password has been successfully reset. Your new password is <cfoutput>#new_pass#</cfoutput>. This is only a temporary password and should be changed as soon as possible.
-                </cfmail>
-
-                <cfabort>
-            </cfif>
-        </cfif>
 
         <!--- checks to see if the user is logged in, if not, attempts to log the user into the system --->
         <cflogin>
