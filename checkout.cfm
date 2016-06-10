@@ -17,6 +17,7 @@ DATE MODIFIED:
 
 <head>
 	<title>RIS Textbook Management</title>
+
 </head>
 
 <body>
@@ -29,6 +30,7 @@ DATE MODIFIED:
 		<div>
 			<h3>Loan Confirmation:</h3>
             <!--- retrieve datasource from Application.cfc --->
+            <cfdump var="#form#">
 			<cfset datasource = Application.datasource />
             <cfset Book = CreateObject("components/qry_book") />
             <cfset Book.init(datasource) />
@@ -45,19 +47,26 @@ DATE MODIFIED:
           
 			
             <!--- Add button to confirm checkout--->
+            <form id="checkout-confirm" action="bookstore.cfm" method="POST">
+            	<input type="hidden" value="#BookID#" name="book">
+                
+				<button name="ConfirmCheckout" value="Back" type="button" form="checkout-confirm">Confirm</button>
+                
+			</form>
+            <cfdump var="#DateFormat(Now(), "yyyy-mm-dd")#" />
+
             <!--- if button is pressed --->
-            <!--- Create a Loan Object--->
-            <cfset Checkout = CreateObject("components/qry_checkout") />
-
-            <!--- Call the Checkout's constructor and pass in the datasource--->
-            <cfset Checkout.init(datasource) />
-           <!---  <cfset newCheckout = Checkout.createCheckout(userID, bookID) /> --->
+            <cfif StructKeyExists(FORM, "ConfirmCheckout")>
+            	<!--- Create a Loan Object--->
+            	<cfset Checkout = CreateObject("components/qry_checkout").init(datasource) />
+          		<cfif Checkout.createCheckout("#userID#", "#FORM.book#")>
+ 					<cfoutput>#Checkout#</cfoutput>
+                    <cfelse>
+                    <cfoutput>#cgi#</cfoutput>
+                </cfif>
+            </cfif>
             
-			<!--- verify Loan object--->
-            
-            <!--- button to "ok"--->
-
-
+           	 <!--- button to "cancel"--->
 		</div>
 	</div>
 	
@@ -69,3 +78,5 @@ DATE MODIFIED:
 </body>
 
 </html>
+
+ 

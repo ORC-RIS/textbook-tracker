@@ -20,7 +20,7 @@ DATE MODIFIED:
     <cffunction name="createCheckout" access="public" returntype="boolean">
 		<cfargument name="BookID" type="int" required="yes">
         <cfargument name="UserID" type="int" required="yes">
-        <cfset myResult="false">
+        <cfset myResult="true">
         
         <cfstoredproc datasource="#variables.datasource#" procedure="usp_BookUserCreate" >
         	<cfprocparam cfsqltype="cf_sql_int" dbvarname="@UserID" value="#UserID#">
