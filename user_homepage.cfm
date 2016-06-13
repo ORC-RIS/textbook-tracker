@@ -13,14 +13,18 @@
   	</div> <p></p>
   	
     <div class="container">
-      <form action="bookstore.cfm" method="POST">
-        <!--- <input type="submit" value="View My Books" class="btn btn-info" name="bookstore_request_mine"> --->
-        <input type="submit" value="View Books" class="btn btn-info" name="bookstore_request">
-      </form>
-    </div>
+      <div class="dropdown">
+          <a href="./bookstore.cfm" class="btn btn-primary" id="pgChoice">View Books</a><button id="viewPages" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li><a href="##">View Books</a></li>
+            <li><a href="##">View/Return My Books</a></li>
+          </ul>
+      </div>
+    </div><p></p>
 
     <div class="container">
-  	  <form action="index.cfm" method="POST">
+  	  <form action="/security.cfm" method="POST">
   		  <input type="submit" value="Sign Out" class="btn btn-default" name="logout">
   		  <input type="submit" value="Change Password" class="btn btn-default" name="change_pass">
   	  </form>
@@ -28,6 +32,35 @@
 	   
 	 </div>
   </body>
+
+  <style type="text/css">
+    #viewPages,
+    #pgChoice {height: 34px;}
+
+    #viewPages {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    #pgChoice {
+      color:white;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    /*#goToLink a{ color: white; }*/
+
+  </style>
+  <script type="text/javascript">
+    $(function() {
+      $(".dropdown .dropdown-menu li").click(function() {
+        console.log($(this).text());
+        $("#pgChoice").text($(this).text());
+        if ($(this).text() == "View Books")
+          $("#pgChoice").attr("href", "./bookstore.cfm")
+        else if ($(this).text() == "View/Return My Books")
+          $("#pgChoice").attr("href", "./mybooks.cfm")
+      })
+    });
+  </script>
 
   <cfinclude template="includes/footer.cfm">
 </html>

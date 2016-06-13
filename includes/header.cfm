@@ -5,50 +5,35 @@
 	<cflogout>
 </cfif>
 
-<!--- I can just add all of these to an array called, "allowed pages" or something --->
-<cfif getAuthUser() EQ "">
-	<cfif #CGI.SCRIPT_NAME# NEQ "/login.cfm" AND #CGI.SCRIPT_NAME# NEQ "/index.cfm" AND #CGI.SCRIPT_NAME# NEQ "/registration.cfm" 
-	AND #CGI.SCRIPT_NAME# NEQ "/forgotten_name.cfm" AND #CGI.SCRIPT_NAME# NEQ "/forgotten_pass.cfm" AND #CGI.SCRIPT_NAME# NEQ "/action_page.cfm">
-		<cfif NOT isDefined("cflogin")>
-			<cflocation 
-				url="login.cfm"
-				addtoken="false" />
-		</cfif>
-	</cfif>
-</cfif>
+<!--- create the user object/component --->
+<cfset LoggedUser = CreateObject("components/user") />
+<cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
 
-<!--- user is logged in but is trying to access admin pages --->
-<cfif getAuthUser() NEQ 'admin'>
-	<cfif #CGI.SCRIPT_NAME# EQ '/users_view.cfm'>
-		<cflocation 
-			url="user_homepage.cfm"
-			addtoken="false" />
-	</cfif>
+<!--- check to see if the user is trying to access a page for which he/she doesn't have permission to view --->
+<cfif "#CGI.script_name#" contains "admin">
+    <cfif #LoggedUser.getUserRole()# NEQ 'admin'>
+        <cflocation url="/user_homepage.cfm" addtoken="false">
+    </cfif>
 </cfif>
-
-<cfquery name="loginQuery2" datasource="#GLOBAL_DATASOURCE#">
-          SELECT *
-          FROM Users2
-          WHERE username = '#getAuthUser()#'
-</cfquery>
 
 <!--- "logged in as" header message --->
+<!--- Replaced getAuthUser() with isDefined("LoggedUser") --->
 <cfif getAuthUser() NEQ "">
+	<cfset LoggedUser.init(Application.datasource, "#getAuthUser()#", "") />
     <div class="container">
       <div class="row-fluid">
         <div class="span6 pull-right" style="text-align:right">
-        	<cfif getAuthUser() EQ "admin">
-        		Logged in as <cfoutput>#loginQuery2.username#</cfoutput>
-        	<cfelse>
-        		Logged in as <cfoutput>#loginQuery2.first_name# #loginQuery2.last_name#</cfoutput>
-        	</cfif>
+        	<cfoutput>
+        		Name: #LoggedUser.getFirstName()# #LoggedUser.getLastName()#<br/>
+        		Role: #LoggedUser.getUserRole()#
+        	</cfoutput>
         </div>
       </div>
     </div>
 </cfif>
 
 <head>
-	<title>ColdFusion Demo Pages</title>
+	<title>Textbook Tracker</title>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -62,9 +47,9 @@
 	<div class="container">
 		<div class="page-header" style="page-break-inside: avoid;">
 			<a href="/login.cfm">
-				<img src="images/logo.png" width="140" style="float: left; margin-top:-13px; margin-right: 15px;">
+				<img src="/images/logo.png" width="140" style="float: left; margin-top:-13px; margin-right: 15px;">
 			</a>
-	    	<h1>ColdFusion Demo Pages</h1>
+	    	<h1>Textbook Tracker</h1>
 	    </div>
     </div>
 </body>

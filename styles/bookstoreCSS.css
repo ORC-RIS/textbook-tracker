@@ -16,10 +16,10 @@ h1{
 h3{
 	text-align:center;	
 }
-div{
+.container-fluid, header{
 	border: 3px solid #000000;	
 }
-div div{
+.container-fluid .content{
 	border:#FC0 thin solid;
 	border-width: 6px;
 	
@@ -33,5 +33,14 @@ table tr:nth-child(even) {
 }
 tr{
 	background-color:d0d0d0;
-	
+}
+
+#WaitlistPopup > div{
+	border: none;
+}
+
+.modal-header {
+	padding: 5px !important;
+}
+
 

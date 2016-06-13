@@ -1,5 +1,5 @@
 <html>
-  <cfinclude template="includes/header.cfm">
+  <cfinclude template="/includes/header.cfm">
   
   <body>
     <div class="jumbotron">
@@ -25,15 +25,16 @@
        
         <!--- grabs the set of all entries in the database where the username is the same as the one inputted in our form; 
         since username is a key in the DB, there should only be one --->
-
+      
         <!--- create and initialize user object --->
         <cfset User_Registration_Object = CreateObject("components/user") />
         <cfset User_Registration_Object.init (Application.datasource, "#FORM.username#", "") />
 
         <cfset retrieved_username = User_Registration_Object.getUsername()>
       
-        <!--- if query.username is not empty, then the username already exists in our database, which is a problem, 
-        since our key constraint doesn't allow us to have two tuples in the DB with the same username --->
+     <!---    <cfdump var="#User_Registration_Object.getUsername()#">
+        <cfabort> --->
+
         <cfif retrieved_username NEQ "">
           <cfoutput>
            <div class="alert alert-warning">
@@ -55,7 +56,9 @@
         <!--- if we're here, then that the user has filled out all the forms and that their desired username wasn't taken --->
 
         <!--- query for checking if the user's inputted email doesn't already exist in the system --->
+
         <cfset retrieved_email = User_Registration_Object.getEmail()>
+
 
         <cfdump var="#retrieved_email#">
 
@@ -78,7 +81,7 @@
         </cfif>
 
         <cfset registration_query = User_Registration_Object.addUserToDatabase('#FORM.username#', '#hashed_password#', '#FORM.f_name#', '#FORM.l_name#', '#FORM.email#', 'user') />
-
+        
         <cflocation url="action_page.cfm?sender=reg" addtoken="false">
         
         </cfif>
@@ -136,7 +139,7 @@
       </div>
 
       <div class="container">
-        <form action="index.cfm" align="center" method="POST">
+        <form action="../index.cfm" align="center" method="POST">
           <input type="submit" class="btn btn-default" value="Back" name="register">
         </form>
       </div>
@@ -144,5 +147,5 @@
     </div>    
   </body>
 
-  <cfinclude template="includes/footer.cfm">
+  <cfinclude template="/includes/footer.cfm">
 <html>
