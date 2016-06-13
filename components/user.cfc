@@ -54,13 +54,13 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
         <cfreturn emailNameTuple>
     </cffunction>
  
-     <cffunction name="getUsernameFromUID" access="public" returntype="query" hint="returns a tuple containing username/email">
+     <cffunction name="getUsernameFromUID" access="public" returntype="string" hint="returns a tuple containing username/email">
         <cfargument name="userid" type="string" required="yes" />
         <cfstoredproc datasource="#variables.datasource#" procedure="usp_GetUsernameFromUID" >
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@userid" value="#userid#">
-            <cfprocresult name="username">
+            <cfprocresult name="objects">
         </cfstoredproc>
-        <cfreturn username>
+        <cfreturn objects.username>
     </cffunction>
 
     <cffunction name="recoverPassword" access="public" returntype="query" hint="returns a tuple containing username/email/password">
@@ -114,6 +114,25 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
             <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@secure_code" value="#secure_code#">
             <cfprocresult name="associatedTuples">
+        </cfstoredproc>
+    </cffunction>
+
+    <cffunction name="verifyCodeEmailCombo" access="public" returntype="query" hint="returns a tuple if an email is associated with a code and returns nothing otherwise">
+        <cfargument name="email" type="string" required="yes" />
+        <cfargument name="secure_code" type="string" required="yes" />
+        <cfstoredproc datasource="#variables.datasource#" procedure="usp_verifyCodeEmailCombo" >
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@secure_code" value="#secure_code#">
+            <cfprocresult name="associatedTuples">
+        </cfstoredproc>.
+        <cfreturn associatedTuples>
+    </cffunction>
+
+    <cffunction name="deleteEmailCodeEntry" access="public" returntype="void" hint="deletes a code/email entry after the user has successfully reset their password">
+        <cfargument name="email" type="string" required="yes" />
+        <cfstoredproc datasource="#variables.datasource#" procedure="usp_DeleteEmailCodeEntry" >
+            <cfprocparam cfsqltype="cf_sql_varchar" dbvarname="@email" value="#email#">
+            <cfprocresult name="isthisthingevenneeded[questionmark]">
         </cfstoredproc>
     </cffunction>
 

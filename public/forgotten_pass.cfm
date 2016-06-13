@@ -14,7 +14,15 @@
         <cfset secure_code = Hash(Hash(current_time, "SHA-512"), "SHA-512") />
 
         <!--- create the query object --->
-        <cfset forgotPassQuery = User_Recov.associateCodeWithEmail("#FORM.email#", "#secure_code#") />
+        <cftry>
+          <cfset forgotPassQuery = User_Recov.associateCodeWithEmail("#FORM.email#", "#secure_code#") />
+
+          <cfcatch type="database">
+            <cflocation url="/public/action_page.cfm?sender=fptransactioninprogress" addtoken="false">
+            <!--- <cfthrow message="#cfcatch.Message#"> --->
+          </cfcatch>
+        </cftry>
+
 
         <cfset userID = User_Recov.recoverUsername("#FORM.email#").userid />
 
@@ -23,7 +31,7 @@
           <cfmail 
             from="noreply@webdev1.research.ucf.edu" 
             to="#FORM.email#" 
-            subject="Important Information">Our records state that you've forgotten your password and would like to reset it. If this is the case, then please follow the following link, if this email was sent in error, then you may simply ignore this message. http://vinay.move.webdev1.research.ucf.edu/security.cfm?code=<cfoutput>#secure_code#</cfoutput>&uid=<cfoutput>#userID#</cfoutput>
+            subject="Important Information">Our records state that you've forgotten your password and would like to reset it. If this is the case, then please follow the following link, if this email was sent in error, then you may simply ignore this message. http://vinay.move.webdev1.research.ucf.edu/public/recover_password.cfm?code=<cfoutput>#secure_code#</cfoutput>&uid=<cfoutput>#userID#</cfoutput>
           </cfmail> 
 
           <cflocation url="action_page.cfm?sender=fp" addtoken="false">
