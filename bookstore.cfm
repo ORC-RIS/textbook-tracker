@@ -41,10 +41,13 @@ DATE MODIFIED:
 
 			<cfif structKeyExists(FORM, "joinWait")>
 				<cfset New_WaitList_User = CreateObject("components/inventory") />
-		        <cfset New_WaitList_User.init(Application.datasource, "#FORM.username#", "#FORM.bookid#", "#FORM.title#") />
+		        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#","#FORM.bookid#","#FORM.title#") />
+
 
 		        <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.date#")>
 		        <cfset ayylmao = New_WaitList_User.findQueuePosition("#FORM.date#")>
+		        <!--- <cfdump var="#ayylmao#">
+		        <cfabort> --->
 				
 				<!--- Show user information regarding waitlist --->
 				<script type="text/javascript">
@@ -84,7 +87,7 @@ DATE MODIFIED:
 						<td>#ISBN#</td>
 						<td>#Title#</td>
 						<td align="center">
-							<cfif Quantity GTE 1>
+							<cfif #DateOut# EQ "">
 								<form id="book-actions" action="checkout.cfm" method="GET">
 									<button name="CheckoutBook" type="button" form="book-actions" value="#BookID#">Checkout</button>
 								</form></td>
@@ -101,13 +104,14 @@ DATE MODIFIED:
 
 											<div class="modal-body">
 												<p style="text-align:center;">This book is currently unavailable. Would you like to join the waitlist for:<br> <strong>#Title#</strong>?</p>
-												<p> User: #LoggedUser.getUserName()# <br/>
+												<p> User: #LoggedUser.getUserName()#<br/>
+													User ID: #LoggedUser.getUserID()#<br/>
 													Book: #Title#<br/>
 													Date: #DateFormat(Now(), "yyyy-mm-dd")#
 												</p>
 												<div style="text-align:right;">
 													<form action="bookstore.cfm" method="POST">
-														<input type="hidden" value="#LoggedUser.getUserName()#" name="username">
+														<input type="hidden" value="#LoggedUser.getUserID()#" name="userID">
 														<input type="hidden" value="#BookID#" name="bookid">
 														<input type="hidden" value="#Title#" name="title">
 														<input type="hidden" value="#DateFormat(Now(), "yyyy-mm-dd")#" name="date">
