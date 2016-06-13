@@ -58,7 +58,7 @@ DATE MODIFIED:
 	</div>
 	
 	<hr>
-    <form action="../cfapp/index.cfm" align="center" method="POST">
+    <form action="../bookstore.cfm" align="center" method="POST">
     	<input type="submit" class="btn btn-default" value="Back" name="return_from_books">
     </form>
       

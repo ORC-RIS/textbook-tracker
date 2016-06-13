@@ -31,7 +31,6 @@ DATE MODIFIED:
                 returntype="void"
                 output="false"
                 hint="Fires when the session is first created.">
-                <cfabort showerror="Test">
                 <cfreturn />
     </cffunction>
                     
