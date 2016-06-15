@@ -89,8 +89,8 @@ DATE MODIFIED:
 						<td align="center">
 
 							<cfif #DateOut# EQ "">
-								<form id="book-actions" action="checkout.cfm" method="GET">
-									<button name="CheckoutBook" type="button" form="book-actions" value="#BookID#">Checkout</button>
+								<form id="book-actions" action="/checkout.cfm" method="POST">
+									<button name="CheckoutBook" type="submit" form="book-actions" value="#BookID#">Checkout</button>
 								</form></td>
 
 								<cfelse>
