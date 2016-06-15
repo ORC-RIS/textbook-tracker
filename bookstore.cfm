@@ -18,6 +18,9 @@ DATE MODIFIED:
 	 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</cfoutput>
 
+<cfset Bookstore_User = CreateObject("components/inventory") />
+<cfset Bookstore_User.init(Application.datasource,"#LoggedUser.getUserID()#") />
+<cfset associatedBooks = Bookstore_User.findAssociatedBooks() />
 <head>
 	<title>RIS Textbook Management</title>
 </head>
@@ -51,10 +54,10 @@ DATE MODIFIED:
 
 			<cfif structKeyExists(FORM, "joinWait")>
 				<cfset New_WaitList_User = CreateObject("components/inventory") />
-		        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#","#FORM.bookid#","#FORM.title#") />
+		        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#") />
+				
 
-
-		        <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.date#")>
+		        <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.bookid#")>
 		        <cfset ayylmao = New_WaitList_User.findQueuePosition("#FORM.date#")>
 		        <!--- <cfdump var="#ayylmao#">
 		        <cfabort> --->
@@ -93,17 +96,34 @@ DATE MODIFIED:
 					<th>Availability</th>
 				</tr>
 				<cfoutput query="allBooks" startrow="1">
+				 	<cfset curBookID=#BookID#>
+					<cfset isAssociated = FALSE>
+					<cfloop query="associatedBooks">
+						<cfif curBookID EQ BookID>
+							<cfset isAssociated = TRUE>
+						</cfif>
+					</cfloop>
 					<tr>
 						<td>#ISBN#</td>
 						<td>#Title#</td>
 						<td align="center">
 							<cfif #DateOut# EQ "">
 								<form id="book-actions" action="checkout.cfm" method="GET">
-									<button name="CheckoutBook" type="button" form="book-actions" value="#BookID#">Checkout</button>
+									<cfif isAssociated>
+										<button disabled class="btn" name="CheckoutBook" type="button" form="book-actions" value="#BookID#">Checkout</button>
+									<cfelse>
+										<button name="CheckoutBook" class="btn" type="button" form="book-actions" value="#BookID#">Checkout</button>
+									</cfif>
 								</form></td>
-								<cfelse>
-									<button name="Join" class="btn btn-sm" data-toggle="modal"
-									data-target="##WaitlistPopup">Join Waitlist</button></td>
+							<cfelse>
+								<cfif isAssociated>
+										<button disabled name="Join" class="btn btn-sm" data-toggle="modal"
+											data-target="##WaitlistPopup">Join Waitlist</button>
+									<cfelse>
+										<button name="Join" class="btn btn-sm" data-toggle="modal"
+											data-target="##WaitlistPopup">Join Waitlist</button>
+								</cfif>
+								</td>
 								<div id="WaitlistPopup" class="modal fade">
 									<div class="modal-dialog">
 										<div class="modal-content">
