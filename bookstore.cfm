@@ -36,9 +36,6 @@ DATE MODIFIED:
             <!--- Object to hold return data--->
             <cfset allBooks = Book.getAllBooks() />
 
-
-				
-
 			<cfif structKeyExists(FORM, "joinWait")>
 				<cfset New_WaitList_User = CreateObject("components/inventory") />
 		        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#","#FORM.bookid#","#FORM.title#") />
@@ -82,7 +79,10 @@ DATE MODIFIED:
 					<th>Title</th>
 					<th>Availability</th>
 				</tr>
+
 				<cfoutput query="allBooks" startrow="1">
+							<!--- <cfdump var="#allBooks#"> --->
+
 					<tr>
 						<td>#ISBN#</td>
 						<td>#Title#</td>
@@ -92,6 +92,12 @@ DATE MODIFIED:
 								<form id="book-actions" action="/checkout.cfm" method="POST">
 									<button name="CheckoutBook" type="submit" form="book-actions" value="#BookID#">Checkout</button>
 								</form></td>
+
+								<!--- TODO add check if user has book checked out, button should offer CHECK IN option  --->
+<!--- 								<cfif #DateIn# EQ NULL AND #UserID# NEQ #FORM.userID#>
+									<form id="return-book" action="/checkin.cfm" method="POST">
+										<button name="CheckInBook" type="submit" form="return-book" value="#BookID#">Check In</button>
+								</cfif>  --->
 
 								<cfelse>
 									<button name="Join" class="btn btn-sm" data-toggle="modal"

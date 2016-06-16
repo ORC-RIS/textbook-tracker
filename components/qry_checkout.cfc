@@ -18,13 +18,14 @@ DATE MODIFIED:
 	</cffunction>
     
     <cffunction name="createCheckout" access="public" returntype="boolean">
-		<cfargument name="BookID" type="int" required="yes">
-        <cfargument name="UserID" type="int" required="yes">
+		<cfargument name="BookID" type="numeric" required="yes">
+        <cfargument name="UserID" type="numeric" required="yes">
         <cfset myResult="true">
         
         <cfstoredproc datasource="#variables.datasource#" procedure="usp_BookUserCreate" >
-        	<cfprocparam cfsqltype="cf_sql_int" dbvarname="@UserID" value="#UserID#">
-    		<cfprocparam cfsqltype="cf_sql_int" dbvarname="@BookID" value="#BookID#">
+            <cfprocparam cfsqltype="cf_sql_int" dbvarname="@BookID" value="#BookID#">
+            <cfprocparam cfsqltype="cf_sql_int" dbvarname="@UserID" value="#UserID#">
+            <cfprocparam cfsqltype="cf_sql_date" dbvarname="@ReqDate" value="#Now()#">
     		<cfprocparam cfsqltype="cf_sql_date" dbvarname="@DateOut" value="#Now()#">
 		</cfstoredproc>
         <!--- <cfprocresult name="returnName"> --->
