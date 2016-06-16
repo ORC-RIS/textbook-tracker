@@ -1,7 +1,7 @@
 <cfset GLOBAL_DATASOURCE = 'dsTestDatabaseSqldev1'>
 
 <!--- if the user navigates to the login/index page, then log said user out --->
-<cfif #CGI.SCRIPT_NAME# EQ "/login.cfm" OR #CGI.SCRIPT_NAME# EQ "/index.cfm">
+<cfif #CGI.SCRIPT_NAME# EQ "/public/login.cfm" OR #CGI.SCRIPT_NAME# EQ "/index.cfm">
 	<cflogout>
 </cfif>
 
@@ -46,7 +46,7 @@
 <body>
 	<div class="container">
 		<div class="page-header" style="page-break-inside: avoid;">
-			<a href="/login.cfm">
+			<a href="/public/login.cfm">
 				<img src="/images/logo.png" width="140" style="float: left; margin-top:-13px; margin-right: 15px;">
 			</a>
 	    	<h1>Textbook Tracker</h1>
