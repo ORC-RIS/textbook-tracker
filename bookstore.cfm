@@ -13,26 +13,16 @@ DATE MODIFIED:
 <html>
 	<cfoutput>
 		<link href="styles/bookstoreCSS.css" rel="stylesheet" type="text/css">
-	 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-	 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-	 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 	</cfoutput>
 
 <cfset Bookstore_User = CreateObject("components/inventory") />
 <cfset Bookstore_User.init(Application.datasource,"#LoggedUser.getUserID()#") />
 <cfset associatedBooks = Bookstore_User.findAssociatedBooks() />
 <head>
-	<title>RIS Textbook Management</title>
+	<cfinclude template="/includes/header.cfm">
 </head>
 
 <body>
-
-	<header>
-		<h1>TEXTBOOK TRACKER</h1>
-
-		<!--- test, be sure to remove --->
-		<cfoutput>logged in as user: <h4>#getAuthUser()#</h4></cfoutput>
-	</header>
 
 	<div class="container-fluid">
 		<div class="content">
@@ -56,6 +46,7 @@ DATE MODIFIED:
 				<cfset New_WaitList_User = CreateObject("components/inventory") />
 		        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#") />
 				
+
 
 		        <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.bookid#")>
 		        <cfset ayylmao = New_WaitList_User.findQueuePosition("#FORM.date#")>
@@ -107,20 +98,24 @@ DATE MODIFIED:
 						<td>#ISBN#</td>
 						<td>#Title#</td>
 						<td align="center">
+
 							<cfif #DateOut# EQ "">
 								<form id="book-actions" action="checkout.cfm" method="GET">
+
 									<cfif isAssociated>
 										<button disabled class="btn" name="CheckoutBook" type="button" form="book-actions" value="#BookID#">Checkout</button>
 									<cfelse>
 										<button name="CheckoutBook" class="btn" type="button" form="book-actions" value="#BookID#">Checkout</button>
 									</cfif>
 								</form></td>
+
 							<cfelse>
 								<cfif isAssociated>
 										<button disabled name="Join" class="btn btn-sm" data-toggle="modal"
 											data-target="##WaitlistPopup">Already on Waitlist</button>
 									<cfelse>
 										<button name="Join" class="btn btn-sm" data-toggle="modal"
+
 											data-target="##WaitlistPopup">Join Waitlist</button>
 								</cfif>
 								</td>
@@ -172,7 +167,8 @@ DATE MODIFIED:
 		</cfinput>
 	</cfform> --->
 	<hr>
-    <form action="../index.cfm" align="center" method="POST">
+
+    <form action="/security.cfm" align="center" method="POST">
     	<input type="submit" class="btn btn-default" value="Back" name="return_from_books">
     </form>
 

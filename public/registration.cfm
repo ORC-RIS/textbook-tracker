@@ -1,5 +1,5 @@
 <html>
-  <cfinclude template="includes/header.cfm">
+  <cfinclude template="/includes/header.cfm">
   
   <body>
     <div class="jumbotron">
@@ -32,8 +32,8 @@
 
         <cfset retrieved_username = User_Registration_Object.getUsername()>
       
-        <!--- if query.username is not empty, then the username already exists in our database, which is a problem, 
-        since our key constraint doesn't allow us to have two tuples in the DB with the same username --->
+     <!---    <cfdump var="#User_Registration_Object.getUsername()#">
+        <cfabort> --->
 
         <cfif retrieved_username NEQ "">
           <cfoutput>
@@ -139,7 +139,7 @@
       </div>
 
       <div class="container">
-        <form action="index.cfm" align="center" method="POST">
+        <form action="../index.cfm" align="center" method="POST">
           <input type="submit" class="btn btn-default" value="Back" name="register">
         </form>
       </div>
@@ -147,5 +147,5 @@
     </div>    
   </body>
 
-  <cfinclude template="includes/footer.cfm">
+  <cfinclude template="/includes/footer.cfm">
 <html>
