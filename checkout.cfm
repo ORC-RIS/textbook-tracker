@@ -16,23 +16,33 @@ DATE MODIFIED:
 	</cfoutput>
 
 <head>
+    <cfinclude template="/includes/header.cfm">
+    <cfset user = #getAuthUser()#>
+   <!--- <h1 class="text-center"> 
+        <cfoutput>
+            So you want to rent a book, #user#?
+        </cfoutput>
+    </h1> --->
+    
 	<title>RIS Textbook Management</title>
+
 
 </head>
 
 <body>
 
 <cfset CheckBook = #FORM.CheckoutBook#>
+<div class="jumbotron">
+	<div class="container">
 
-	<div>
-		<h1>Textbook Tracker</h1>
 	</div>
 
-	<div>
+	<div class="container-fluid" >
 		<div>
 			<h3>Loan Confirmation</h3>
             <!--- <cfdump var="#form#"> --->
-           <!---  <cfoutput>
+
+<!---             <cfoutput>
                 CheckBook is #CheckBook#
                 Checkout Book is #FORM.CheckoutBook#
             </cfoutput> --->
@@ -51,17 +61,10 @@ DATE MODIFIED:
             <cfif #request_method# IS "POST">
                 <!--- validate --->
            
-                <!--- retrieve userID from session and print to screen--->
-                <cfset user = #getAuthUser()#>
-                <cfoutput> 
-                    <p>Current user is:  #getAuthUser()# </p>
-                </cfoutput>
-
-
                 <cfif StructKeyExists(FORM, "ConfirmCheckout")>
                     <cfdump var="#form#" label="2nd Form">
 
-                    <cfdump var="#Int(checkoutbook)#" label="Book ID">
+                    <!--- <cfdump var="#Int(checkoutbook)#" label="Book ID"> --->
 
                     <cfset bookID = FORM.CheckoutBook>
                     <cfset thisUser = CreateObject("components/user") />
@@ -70,10 +73,9 @@ DATE MODIFIED:
                     <cfset Checkout = CreateObject("components/qry_checkout") />
                     <cfset Checkout.init(datasource) />
                         
-                        <!--- <cfabort showerror="test"> --->
-                        
                         <cfif Checkout.createCheckout("#Int(checkoutbook)#", "#thisUser.getUserID()#")>
                             <cfdump var="#Checkout#" >
+                            
                             <cfelse>
                                 <cfdump var="#cgi#" label="failed checkout" >
                         </cfif>
@@ -86,7 +88,7 @@ DATE MODIFIED:
                     <cftry>
                         <!--- verify book and print to screen--->
                         <cfset book = Book.getBook(checkoutbook) />
-                        <cfdump var="#book#">
+                        <!--- <cfdump var="#book#"> --->
                         <cfoutput>
                             <p>Request to rent: #book.title#</p>
                         </cfoutput>
@@ -121,12 +123,15 @@ DATE MODIFIED:
              </cfif> <!--- end if POST--->
 		</div>
 	</div>
-	
+</div>	
 	<hr>
     <form action="../bookstore.cfm" align="center" method="POST">
     	<input type="submit" class="btn btn-default" value="Back" name="return_from_books">
     </form>
-      
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
