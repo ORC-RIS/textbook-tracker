@@ -118,7 +118,7 @@ DATE MODIFIED:
 							<cfelse>
 								<cfif isAssociated>
 										<button disabled name="Join" class="btn btn-sm" data-toggle="modal"
-											data-target="##WaitlistPopup">Join Waitlist</button>
+											data-target="##WaitlistPopup">Already on Waitlist</button>
 									<cfelse>
 										<button name="Join" class="btn btn-sm" data-toggle="modal"
 											data-target="##WaitlistPopup">Join Waitlist</button>
