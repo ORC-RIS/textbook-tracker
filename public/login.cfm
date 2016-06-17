@@ -1,11 +1,11 @@
 <html> 
-  <cfinclude template="includes/header.cfm">
+  <cfinclude template="/includes/header.cfm">
 
   <body>
     <div class="jumbotron">
       <div class="container">
         <h2>Login</h2>
-        <form class="form-horizontal" role="form" action="index.cfm" method="POST">
+        <form class="form-horizontal" role="form" action="/security.cfm" method="POST">
           <div class="form-group">
             <label class="control-label col-sm-2">Username:</label>
             <div class="col-sm-10">
@@ -28,13 +28,13 @@
    
       <div class="container">
         <div class="form-group"> 
-          <form action="registration.cfm" style="float: left;">
+          <form action="public/registration.cfm" style="float: left;">
             <input type="submit" class="btn btn-default" value="Register">
           </form>
-          <form action="forgotten_pass.cfm" method="POST" style="float: right; margin-left: 10px">
+          <form action="public/forgotten_pass.cfm" method="POST" style="float: right; margin-left: 10px">
              <input type="submit" class="btn btn-default" value="Forgot Password" name="forgot_pass">
           </form>
-          <form action="forgotten_name.cfm" method="POST" style="float: right;">
+          <form action="public/forgotten_name.cfm" method="POST" style="float: right;">
              <input type="submit" class="btn btn-default" value="Forgot Username" name="forgot_name">
           </form>
         </div>
@@ -43,5 +43,5 @@
     </div>
   </body>
 
-  <cfinclude template="includes/footer.cfm">
+  <cfinclude template="/includes/footer.cfm">
 </html>

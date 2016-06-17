@@ -1,5 +1,5 @@
 <html>
-  <cfinclude template="includes/header.cfm">
+  <cfinclude template="/includes/header.cfm">
 
   <body>
     <div class="jumbotron">
@@ -7,16 +7,31 @@
       <cfif structKeyExists(FORM, 'email_provided_pass')>
         <cfset User_Recov = CreateObject("components/user") />
         <cfset User_Recov.init(Application.datasource, "", "#FORM.email#") />
+        
+        <cfset current_time = "#Now()#" />
+
+        <!--- <cfset current_time = "{ts '2016-06-10 14:46:00'}" /> --->
+        <cfset secure_code = Hash(Hash(current_time, "SHA-512"), "SHA-512") />
 
         <!--- create the query object --->
-        <cfset forgotPassQuery = User_Recov.recoverPassword("#FORM.email#") >
+        <cftry>
+          <cfset forgotPassQuery = User_Recov.associateCodeWithEmail("#FORM.email#", "#secure_code#") />
+
+          <cfcatch type="database">
+            <cflocation url="/public/action_page.cfm?sender=fptransactioninprogress" addtoken="false">
+            <!--- <cfthrow message="#cfcatch.Message#"> --->
+          </cfcatch>
+        </cftry>
+
+
+        <cfset userID = User_Recov.recoverUsername("#FORM.email#").userid />
 
         <cfoutput>
           <!--- TODO: don't send an email if the email doesn't exist in our DB --->
           <cfmail 
             from="noreply@webdev1.research.ucf.edu" 
             to="#FORM.email#" 
-            subject="Important Information">Our records state that you've forgotten your password and would like to reset it. If this is the case, then please follow the following link, if this email was sent in error, then you may simply ignore this message. http://vinay.move.webdev1.research.ucf.edu/index.cfm?email=<cfoutput>#FORM.email#</cfoutput>&code=<cfoutput>#Hash(forgotPassQuery.password)#</cfoutput>
+            subject="Important Information">Our records state that you've forgotten your password and would like to reset it. If this is the case, then please follow the following link, if this email was sent in error, then you may simply ignore this message. http://vinay.move.webdev1.research.ucf.edu/public/recover_password.cfm?code=<cfoutput>#secure_code#</cfoutput>&uid=<cfoutput>#userID#</cfoutput>
           </cfmail> 
 
           <cflocation url="action_page.cfm?sender=fp" addtoken="false">
@@ -42,7 +57,7 @@
       </div>
       
     <div class="container">   
-        <form action="index.cfm" align="center" method="POST">
+        <form action="/index.cfm" align="center" method="POST">
           <input type="submit" class="btn btn-default" value="Back" name="register">
         </form>
     </div>
@@ -50,5 +65,5 @@
     </div>
   </body>
 
-  <cfinclude template="includes/footer.cfm">
+  <cfinclude template="/includes/footer.cfm">
 <html>
