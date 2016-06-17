@@ -69,8 +69,6 @@
         </form> 
       </div>
 
-    <!--- </div> --->
   </body>
 
-  <!--- <cfinclude template="includes/footer.cfm"> --->
 </html>

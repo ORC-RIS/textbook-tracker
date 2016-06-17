@@ -136,7 +136,7 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
         </cfstoredproc>
     </cffunction>
 
-    <!--- getters; these work with the private function, getUserInformation() --->     
+    <!--- these getters work with the private function, getUserInformation() --->     
     <cffunction name="getUsername" access="public" returntype="string" hint="returns the user's username">
         <cfreturn getUserInformation().username>
     </cffunction>
@@ -164,8 +164,5 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
     <cffunction name="getUserID" access="public" returntype="string" hint="returns the user's ID">
         <cfreturn getUserInformation().userID>
     </cffunction>
-
-
-    <!--- end getters --->
 
 </cfcomponent>

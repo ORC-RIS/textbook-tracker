@@ -32,9 +32,6 @@
 
         <cfset retrieved_username = User_Registration_Object.getUsername()>
       
-     <!---    <cfdump var="#User_Registration_Object.getUsername()#">
-        <cfabort> --->
-
         <cfif retrieved_username NEQ "">
           <cfoutput>
            <div class="alert alert-warning">
@@ -56,9 +53,7 @@
         <!--- if we're here, then that the user has filled out all the forms and that their desired username wasn't taken --->
 
         <!--- query for checking if the user's inputted email doesn't already exist in the system --->
-
         <cfset retrieved_email = User_Registration_Object.getEmail()>
-
 
         <cfdump var="#retrieved_email#">
 

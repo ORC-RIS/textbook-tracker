@@ -24,7 +24,7 @@ DATE MODIFIED:
                 returntype="boolean"
                 output="false"
                 hint="Fires when the application is first created.">
-        <cfreturn true />
+                <cfreturn true />
     </cffunction>
 
 	<cffunction name="onSessionStart"
