@@ -65,8 +65,8 @@ DATE MODIFIED:
 			</div>
 		</div>	
 
-		<table class="table table-striped table-bordered">
-			<!--- <thead> --->
+		<table class="table table-striped">
+			<thead>
 			<div class="row">
 				<div class="col-xs-2" style="text-align:center">
 					<h4>ISBN</h4>
@@ -78,11 +78,12 @@ DATE MODIFIED:
 					<h4>Availability</h4>
 				</div>
 			</div>
-			<!--- </thead> --->
+			</thead>
 
-			<!--- <tbody> --->
+			<tbody>
+			<table class="table table-hover">
 			<cfoutput query="allBooks" startrow="1">
-				<tr>
+				<tr class="warning">
 				<div class="row">
 					<td class="col-xs-2" style="text-align:center">#ISBN#</td>
 					<td class="col-xs-8">#Title#</td>
@@ -136,7 +137,7 @@ DATE MODIFIED:
 				</div>
 				</tr>
 			</cfoutput>
-			<!--- </tbody> --->
+			</tbody>
 		</table>	
 	</div>
 
