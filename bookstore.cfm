@@ -1,14 +1,17 @@
 <!---
 DESCRIPTION: Textbook Tracker page
-CREATED BY: David Elliott,
-			John Lynch
+AUTHORS: David Elliott, John Lynch, Raphael Saint Louis
 DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
 
-DATE MODIFIED:
+Modification Log:
+Date 		Action
+=======================================
 06/21/2016: added Bootstrap 3.3.6, added margins to body. When resizing, table now falls outside body when resizing.
 06/22/2016: replaced HTML table with Bootstrap table component. Table now resizes.
+06/23/2016: additional table styling
+06/24/2016: Check In button added, Check In and Check Out buttons bootstrap formatting applied
 --->
 
 <!DOCTYPE html>
@@ -29,9 +32,9 @@ DATE MODIFIED:
 <body>
 	<cfif structKeyExists(FORM, "joinWait")>
 		<cfset New_WaitList_User = CreateObject("components/inventory") />
-        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#","#FORM.bookid#","#FORM.title#") />
+        <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#","#FORM.bookid#","#FORM.title#")>
         <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.date#")>
-        <cfset ayylmao = New_WaitList_User.findQueuePosition("#FORM.date#")>
+       <cfset ayylmao = New_WaitList_User.findQueuePosition("#FORM.date#")>
 		
 		<!--- Show user information regarding waitlist --->
 		<script type="text/javascript">
@@ -39,6 +42,23 @@ DATE MODIFIED:
 				$("#queuePos").modal('show');
 			})
 		</script>
+	</cfif>
+
+<!--- Check in a book --->
+	<cfif structKeyExists(FORM, "CheckInBook")>
+		<cfset isCheckedIn = Book.checkInBook("#FORM.userID#", "#FORM.bookid#")>
+			<cfoutput> 
+				<div class="alert alert-success">
+					Book successfully returned.
+				</div>	
+					<hr>
+			    <form name="backToList" action="bookstore.cfm" align="center" method="POST">
+			    	<button name="affirmCheckin" value="Back" class="btn btn-warning" type="submit">Back</button>
+			    </form>
+			    <!--- code below will return book without confirmation or additional step --->
+				<!--- <cflocation url="bookstore.cfm" addtoken="false"> --->
+			<cfabort>
+	    </cfoutput>
 	</cfif>
 
     <div id="queuePos" class="modal fade">
@@ -65,6 +85,7 @@ DATE MODIFIED:
 			</div>
 		</div>	
 
+		<div class="container">
 		<table class="table table-striped">
 			<thead>
 			<div class="row">
@@ -83,24 +104,25 @@ DATE MODIFIED:
 			<tbody>
 			<table class="table table-hover">
 			<cfoutput query="allBooks" startrow="1">
-				<tr class="warning">
-				<div class="row">
-					<td class="col-xs-2" style="text-align:center">#ISBN#</td>
-					<td class="col-xs-8">#Title#</td>
+				<tr class="warning"> <!--- make the table yellow --->
+				<div class="row" >
+					<td class="col-xs-2" style="vertical-align:middle" >#ISBN#</td>
+					<td class="col-xs-8" style="vertical-align:middle">#Title#</td>
 					<td class="col-xs-2" style="text-align:center">
-						<cfif #DateOut# EQ "">
+						<cfif LEN(#UserID#) EQ 0>
 							<form id="book-actions" action="/checkout.cfm" method="POST">
-								<button name="CheckoutBook" type="submit" form="book-actions" value="#BookID#">Checkout</button>
+								<button name="CheckoutBook" class="btn btn-success btn-block" type="submit" form="book-actions" value="#BookID#">Check Out</button>
 							</form></td>
 
-							<!--- TODO add check if user has book checked out, button should offer CHECK IN option  --->
-<!--- 								<cfif #DateIn# EQ NULL AND #UserID# NEQ #FORM.userID#>
-								<form id="return-book" action="/checkin.cfm" method="POST">
-									<button name="CheckInBook" type="submit" form="return-book" value="#BookID#">Check In</button>
-							</cfif>  --->
-
+							<cfelseif #UserID# EQ "#LoggedUser.getUserID()#">
+									<form id="return-book" action="bookstore.cfm" method="POST">
+										<input type="hidden" value="#LoggedUser.getUserID()#" name="userID">
+										<input type="hidden" value="#BookID#" name="bookid">
+										<button name="CheckInBook" class="btn btn-info btn-block" type="submit" form="return-book">Check In</button>
+									</form></td>
+							
 							<cfelse>
-								<button name="Join" class="btn btn-sm" data-toggle="modal"
+								<button name="Join" class="btn btn-sm btn-block" data-toggle="modal"
 								data-target="##WaitlistPopup">Join Waitlist</button></td>
 							<div id="WaitlistPopup" class="modal fade">
 								<div class="modal-dialog">
@@ -138,7 +160,8 @@ DATE MODIFIED:
 				</tr>
 			</cfoutput>
 			</tbody>
-		</table>	
+		</table>
+		</div>	
 	</div>
 
 	<hr>

@@ -161,7 +161,7 @@ FUNCTIONS: getID, getUsername, getPasswordHash, get firstName, get lastName, get
         <cfreturn getUserInformation().userRole>
     </cffunction>
 
-    <cffunction name="getUserID" access="public" returntype="string" hint="returns the user's ID">
+    <cffunction name="getUserID" access="public" returntype="string" hint="returns the currently logged in UserID">
         <cfreturn getUserInformation().userID>
     </cffunction>
 

@@ -1,12 +1,15 @@
 <!---
 DESCRIPTION: Book Component
-CREATED BY: David Elliott
+CONTRIBUTORS: DAVID ELLIOTT
 DATE CREATED: 05/27/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
 FUNCTIONS: init, createBook, getAllBooks
-DATE MODIFIED:
-	06/01/2016 - datasource variable now stored in Application.cfc
+MODIFICATION LOG:
+DATE        CHANGE
+=====================================================================
+06/01/2016 - datasource variable now stored in Application.cfc
+06/24/2016 - added function to check in a book
 	
 --->
 
@@ -60,5 +63,17 @@ DATE MODIFIED:
         </cfstoredproc>
         <cfreturn book>
     </cffunction>
-        
+
+    <cffunction name="checkInBook" access="public" returntype="any" hint="check in a book">
+      <cfargument name="UserID" type="numeric"  required="yes">
+      <cfargument name="bookid" type="numeric" required="yes">
+
+      <cfstoredproc datasource="#variables.datasource#" procedure="usp_BookUsersAddDateIn">
+          <cfprocparam cfsqltype="cf_sql_int" dbvarname="@UserID" value="#UserID#">
+          <cfprocparam cfsqltype="cf_sql_int" dbvarname="@BookID" value="#BookID#">
+          <!--- <cfprocresult name="checkin"> --->
+      </cfstoredproc>
+      <!--- <cfreturn checkin> --->
+    </cffunction>   
+
 </cfcomponent>

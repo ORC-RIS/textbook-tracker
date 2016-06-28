@@ -5,10 +5,13 @@ DATE CREATED: 05/25/2016
 INPUT PARAMETERS:
 OUTPUT PARAMETERS:
 
-DATE MODIFIED:
-06/17/2016: Applied initial Bootstrap configs (DE)
-06/21/2016: "Cancel" replaced "Back" button if confirmation reconsidered,
-             commented out structs, removed date from below confirm button, tightened up code
+MODIFICATION LOG:
+DATE        CHANGE
+=================================================================
+06/17/2016: Applied initial Bootstrap configs
+06/21/2016: "Cancel" confirmation button instead of "Back" button,
+             commented out structs used for testing, removed date from below confirm button, tightened up code
+
 --->
 
 <!DOCTYPE html>
