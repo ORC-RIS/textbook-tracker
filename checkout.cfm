@@ -11,13 +11,14 @@ DATE        CHANGE
 06/17/2016: Applied initial Bootstrap configs
 06/21/2016: "Cancel" confirmation button instead of "Back" button,
              commented out structs used for testing, removed date from below confirm button, tightened up code
+06/28/2016: Checkout confirmation now returns to bookstore.cfm and button reflects check out
 
 --->
 
 <!DOCTYPE html>
 <html>
 	<cfoutput>
-		<link href="../cfapp/textbook-tracker/bookstoreCSS.css" rel="stylesheet" type="text/css">
+		<link href="../cfapp/styles/bookstoreCSS.css" rel="stylesheet" type="text/css">
 		<link href="../cfapp/styles/bootstrap.3.3.6.modified.css" rel="stylesheet" type="text/css">
 	</cfoutput>
 
@@ -50,7 +51,7 @@ DATE        CHANGE
                     <!--- validate --->
                
                     <cfif StructKeyExists(FORM, "ConfirmCheckout")>
-                        <cfdump var="#form#" label="2nd Form">
+                        <!--- <cfdump var="#form#" label="2nd Form"> --->
 
                         <!--- <cfdump var="#Int(checkoutbook)#" label="Book ID"> --->
 
@@ -61,14 +62,10 @@ DATE        CHANGE
                         <cfset Checkout = CreateObject("components/qry_checkout") />
                         <cfset Checkout.init(datasource) />
                             
-                            <cfif Checkout.createCheckout("#Int(checkoutbook)#", "#thisUser.getUserID()#")>
-                                <cfdump var="#Checkout#" >
-                                
-                                <cfelse>
-                                    <cfdump var="#cgi#" label="failed checkout" >
-                            </cfif>
-
-                        <cfelse>
+                        <cfset completeCheckout = Checkout.createCheckout("#Int(checkoutbook)#", "#thisUser.getUserID()#") />
+                           
+                        <cflocation url="bookstore.cfm" addtoken="false">
+                    <cfelse>
                         <!--- <cfdump var="#form#" label="First Form"> --->
                         
                         <cftry>
@@ -97,9 +94,6 @@ DATE        CHANGE
 
                     </cfif>            
                         
-        			<!--- </form> --->
-                
-               	 <!--- button to "cancel"--->
                  </cfif> <!--- end if POST--->
     	</div>
     </div>	

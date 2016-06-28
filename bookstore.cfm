@@ -12,13 +12,14 @@ Date 		Action
 06/22/2016: replaced HTML table with Bootstrap table component. Table now resizes.
 06/23/2016: additional table styling
 06/24/2016: Check In button added, Check In and Check Out buttons bootstrap formatting applied
+06/28/2016: Check In success page with back button to return to booklist
 --->
 
 <!DOCTYPE html>
 <html>
 	<cfoutput>
+		<link href="../cfapp/styles/bookstoreCSS.css" rel="stylesheet" type="text/css">
 		<link href="../cfapp/styles/bootstrap.3.3.6.modified.css" rel="stylesheet" type="text/css">
-		<link href="styles/bookstoreCSS.css" rel="stylesheet" type="text/css">
 	</cfoutput>
 
 <head>
@@ -48,7 +49,7 @@ Date 		Action
 	<cfif structKeyExists(FORM, "CheckInBook")>
 		<cfset isCheckedIn = Book.checkInBook("#FORM.userID#", "#FORM.bookid#")>
 			<cfoutput> 
-				<div class="alert alert-success">
+				<div class="alert alert-success" align="center">
 					Book successfully returned.
 				</div>	
 					<hr>
@@ -70,7 +71,7 @@ Date 		Action
         		</div>
 				<div class="modal-body">
 					<cfif structKeyExists(FORM, "joinWait")>
-						<cfoutput><p>You have succeessfully been added to the waiting list for #New_WaitList_User.Title#</p>
+						<cfoutput><p>You have successfully been added to the waiting list for #New_WaitList_User.Title#</p>
 						<p>Your current queue position: #ayylmao.RecordCount#</p></cfoutput>
 					</cfif>
 				</div>	
@@ -79,11 +80,11 @@ Date 		Action
     </div>
 
 	<div class="container">
-		<div class="row">
-			<div class="col-xs-12">
+<!--- 		<div class="row">
+			<div class="col-xs-12" align="center">
 				<h3>Current Inventory</h3>
 			</div>
-		</div>	
+		</div>	 --->
 
 		<div class="container">
 		<table class="table table-striped">

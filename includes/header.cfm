@@ -44,12 +44,17 @@
 </head>
 
 <body>
+
+	<!-- ADD UCF HEADER -->
+	<!--- <script type="text/javascript" id="ucfhb-script" src="//universityheader.ucf.edu/bar/js/university-header.js"></script> --->
+	<!-- END UCF HEADER -->
+
 	<div class="container">
 		<div class="page-header" style="page-break-inside: avoid;">
 			<a href="/public/login.cfm">
 				<img src="/images/logo.png" width="140" style="float: left; margin-top:-13px; margin-right: 15px;">
 			</a>
-	    	<h1>Textbook Tracker</h1>
+	    	<h1 style="font-family:Georgia, Helvetica">TEXTBOOK TRACKER</h1>
 	    </div>
     </div>
 </body>
