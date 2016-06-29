@@ -17,20 +17,21 @@ h3{
 	text-align:center;	
 }
 .container-fluid, header{
-	border: 3px solid #000000;	
+	/*border: 3px solid #000000;	*/
 }
 .container-fluid .content{
-	border:#FC0 thin solid;
-	border-width: 6px;
+/*	border:#FC0 thin solid;
+	border-width: 6px;*/
 	
 }
+
 table {
-	
 	border-collapse: collapse;
 }
 table tr:nth-child(even) {
 	background-color: #f2f2f2;
 }
+
 tr{
 	background-color:d0d0d0;
 }
@@ -42,5 +43,7 @@ tr{
 .modal-header {
 	padding: 5px !important;
 }
-
+div div div h3{
+	text-align: center;
+}
 
