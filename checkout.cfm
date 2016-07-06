@@ -88,7 +88,7 @@ DATE        CHANGE
                         <cfoutput>
                             <form id="checkout-confirm" action="checkout.cfm" method="POST">
                                 <input type="hidden" value="#checkoutbook#" name="CheckoutBook">
-                                <button name="ConfirmCheckout" value="Back" type="submit" form="checkout-confirm">Confirm</button>
+                                <button name="ConfirmCheckout" class="btn btn-success" value="Back" type="submit" form="checkout-confirm">Confirm</button>
                             </form> 
                         </cfoutput>               
 
