@@ -34,7 +34,7 @@ Date 		Action
 	<cfif structKeyExists(FORM, "joinWait")>
 		<cfset New_WaitList_User = CreateObject("components/inventory") />
         <cfset New_WaitList_User.init(Application.datasource,"#FORM.userID#","#FORM.bookid#","#FORM.title#")>
-        <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.date#")>
+        <cfset ayylmao = New_WaitList_User.addUserToWaitlist("#FORM.bookid#")>
        <cfset ayylmao = New_WaitList_User.findQueuePosition("#FORM.date#")>
 		
 		<!--- Show user information regarding waitlist --->

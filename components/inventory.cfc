@@ -2,6 +2,7 @@
 	
 	<cfset this.userID="">
 	<cfset this.bookID="">
+	<cfset this.title="">
 	<!--- Initialization function --->
 	<cffunction name="init" access="public" returntype="void" output="true" hint="Sets the database for the book inventory">
 		<cfargument name="database" type="string" required="true" />
